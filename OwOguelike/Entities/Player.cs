@@ -1,14 +1,19 @@
 namespace OwOguelike.Entities;
 
-public class Player : Entity
+public class Player : Entity, IDrawable, ICollidable, IMovable
 {
-    public override void Update(float delta)
+    public DrawLayer Layer { get; set; } = DrawLayer.Characters;
+
+    public float Friction { get; set; } = IMovable.DEFAULT_FRICTION;
+    public float Velocity { get; set; } = IMovable.DEFAULT_VELOCITY;
+    
+    public void Update(float delta)
     {
-        base.Update(delta);
+        throw new NotImplementedException();
     }
 
-    public override void Draw(RenderContext context)
+    public void Draw(RenderContext context)
     {
-        base.Draw(context);
+        throw new NotImplementedException();
     }
 }

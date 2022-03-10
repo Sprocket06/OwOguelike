@@ -1,10 +1,16 @@
 // ReSharper disable RedundantUsingDirective.Global
 
-global using OwOguelike.Attributes;
+global using OwOguelike.Interfaces;
+global using OwOguelike.Enums;
+global using OwOguelike.Entities;
+global using OwOguelike.Scenes.SceneManagement;
+global using OwOguelike.Scenes;
 
 global using Chroma;
+global using Chroma.Commander;
 global using Chroma.Input;
 global using Chroma.Graphics;
+global using Chroma.Input.GameControllers;
 
 global using System;
 global using System.Drawing;

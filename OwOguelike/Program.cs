@@ -1,6 +1,6 @@
 ﻿namespace OwOguelike;
 
-class Program
+internal class Program
 {
     public static void Main(string[] args) => new GameCore().Run();
 }
