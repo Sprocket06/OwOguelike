@@ -1,6 +1,5 @@
 namespace OwOguelike.Entities;
 
-[Drawable(5)]
 public abstract class Entity
 {
     public Vector2 Position;
@@ -17,11 +16,18 @@ public abstract class Entity
         set => Position.Y = value;
     }
 
-    public virtual void Update(float delta)
+    private float _facingAngle;
+    public float FacingAngle
     {
-    }
-
-    public virtual void Draw(RenderContext context)
-    {
+        get => _facingAngle;
+        set
+        {
+            _facingAngle = value % 360;
+            
+            if (_facingAngle < 0)
+            {
+                _facingAngle += 360;
+            }
+        }
     }
 }
