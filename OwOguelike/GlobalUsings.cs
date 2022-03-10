@@ -5,6 +5,7 @@ global using OwOguelike.Enums;
 global using OwOguelike.Entities;
 global using OwOguelike.Scenes.SceneManagement;
 global using OwOguelike.Scenes;
+global using OwOguelike.Input;
 
 global using Chroma;
 global using Chroma.Commander;

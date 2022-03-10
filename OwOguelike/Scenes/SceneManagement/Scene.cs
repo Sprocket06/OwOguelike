@@ -9,6 +9,11 @@ public abstract class Scene
     public virtual void Update(float delta)
     {
     }
+
+    public virtual void ControlAction(ControlEventArgs e)
+    {
+        
+    }
     
     public virtual void MouseMoved(MouseMoveEventArgs e)
     {

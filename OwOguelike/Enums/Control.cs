@@ -2,6 +2,7 @@
 
 public enum Control
 {
+    NotBound,
     MoveUp,
     MoveDown,
     MoveLeft,
