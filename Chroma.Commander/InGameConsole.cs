@@ -164,6 +164,18 @@ namespace Chroma.Commander
             _inputLine.KeyPressed(e);
         }
 
+        public void Toggle()
+        {
+            if (_state == State.Hidden || _state == State.SlidingUp)
+            {
+                _state = State.SlidingDown;
+            }
+            else if (_state == State.Visible || _state == State.SlidingDown)
+            {
+                _state = State.SlidingUp;
+            }
+        }
+
         public void TextInput(TextInputEventArgs e)
         {
             if (_state != State.Visible)
