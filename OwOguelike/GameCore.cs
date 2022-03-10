@@ -1,13 +1,9 @@
 ﻿namespace OwOguelike;
 
-using Chroma;
-using Chroma.Input;
-
 public class GameCore : Game
 {
     public GameCore() : base(new(false, false))
     {
-        
     }
     
     protected override void KeyPressed(KeyEventArgs e)
