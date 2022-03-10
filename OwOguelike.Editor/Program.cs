@@ -1,4 +1,4 @@
-﻿namespace OwOguelike;
+﻿namespace OwOguelike.Editor;
 
 class Program
 {
