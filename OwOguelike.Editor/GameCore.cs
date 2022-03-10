@@ -1,4 +1,4 @@
-﻿namespace OwOguelike;
+﻿namespace OwOguelike.Editor;
 
 using Chroma;
 using Chroma.Input;

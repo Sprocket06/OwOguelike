@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwOguelike", "OwOguelike\OwOguelike.csproj", "{BD484D02-4EE3-4617-AE5B-7ACAD1AA09EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwOguelike.Editor", "OwOguelike.Editor\OwOguelike.Editor.csproj", "{D268DB8D-E515-4491-A710-DA7DA8F4A98B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{BD484D02-4EE3-4617-AE5B-7ACAD1AA09EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD484D02-4EE3-4617-AE5B-7ACAD1AA09EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD484D02-4EE3-4617-AE5B-7ACAD1AA09EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D268DB8D-E515-4491-A710-DA7DA8F4A98B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D268DB8D-E515-4491-A710-DA7DA8F4A98B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D268DB8D-E515-4491-A710-DA7DA8F4A98B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D268DB8D-E515-4491-A710-DA7DA8F4A98B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
