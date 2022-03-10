@@ -5,10 +5,17 @@ namespace OwOguelike;
 public class GameCore : Game
 {
     private InGameConsole _console;
+    [ConsoleVariable("sv_cheats")] private static bool CheatsHehe = false;
     
     public GameCore() : base(new(false, false))
     {
         _console = new InGameConsole(Window);
+    }
+
+    [ConsoleCommand("test")]
+    public static string TestDebug()
+    {
+        return "Debug pog!";
     }
 
     protected override void Update(float delta)

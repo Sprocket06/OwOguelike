@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Text;
@@ -35,10 +36,12 @@ namespace Chroma.Commander
 
         private State _state = State.Hidden;
 
+        private CommandRegistry _registry;
+
         public float SlidingSpeed { get; set; } = 2000;
         public KeyCode ToggleKey { get; set; } = KeyCode.Grave;
 
-        public InGameConsole(Window window, int maxLines = 20)
+        public InGameConsole(Window window, int maxLines = 20, Assembly? assembly = null)
         {
             _window = window;
             _maxLines = maxLines;
@@ -57,6 +60,12 @@ namespace Chroma.Commander
                 _target.Width / 8,
                 HandleUserInput
             );
+            _registry = new CommandRegistry(assembly ?? Assembly.GetCallingAssembly());
+        }
+
+        public void RefreshConVars()
+        {
+            _registry.RefreshItems();
         }
 
         public void Draw(RenderContext context)
@@ -191,7 +200,7 @@ namespace Chroma.Commander
         {
             var sb = new StringBuilder();
             var strings = new List<string>();
-                    
+            
             for (var i = 0; i < input.Length; i++)
             {
                 sb.Append(input[i]);
@@ -202,11 +211,48 @@ namespace Chroma.Commander
                     sb.Clear();
                 }
             }
+            
+            var output = ProcessCommand(input);
+            
+            for (var i = 0; i < output.Length; i++)
+            {
+                sb.Append(output[i]);
+                            
+                if (sb.Length >= _target.Width / 8 || i == output.Length - 1)
+                {
+                    strings.Add(sb.ToString());
+                    sb.Clear();
+                }
+            }
 
             foreach (var s in strings)
             {
                 _scrollBuffer.Push(s);
             }
+        }
+
+        private string ProcessCommand(string input)
+        {
+            var split = input.Split(' ');
+
+            var args = new object[split.Length - 1];
+            for (var i = 1; i < split.Length; i++)
+            {
+                if (int.TryParse(split[i], out var integer))
+                {
+                    args[i - 1] = integer;
+                }
+                else if (float.TryParse(split[i], out var floating))
+                {
+                    args[i - 1] = floating;
+                }
+                else
+                {
+                    args[i - 1] = split[i];
+                }
+            }
+
+            return _registry.Call(split.First(), args);
         }
 
         protected override void FreeManagedResources()
