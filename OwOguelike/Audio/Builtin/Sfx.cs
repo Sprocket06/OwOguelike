@@ -7,5 +7,6 @@ public static partial class Sfx
         { AudioClip.GunFireGeneric, "gunfire.ogg" },
         { AudioClip.GunReloadGeneric, "reload.ogg" },
         { AudioClip.FootstepGeneric, "steps.ogg" },
+        { AudioClip.DashSound, "dash.ogg" },
     };
 }

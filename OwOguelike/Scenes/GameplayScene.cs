@@ -2,10 +2,11 @@ namespace OwOguelike.Scenes;
 
 public class GameplayScene : Scene
 {
-    public override bool LoadStep()
+    public override void LoadStep()
     {
-        return base.LoadStep();
     }
+
+    public override int GetLoadSteps() => 0;
 
     public override void Draw(RenderContext context)
     {

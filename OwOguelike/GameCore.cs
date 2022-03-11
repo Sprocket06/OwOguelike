@@ -31,20 +31,20 @@ public class GameCore : Game
     protected override void LoadContent()
     {
         ContentProvider = Content;
-        _testSound = Sfx.PlayClip("hellyeah.ogg");
+        //_testSound = Sfx.PlayClip("hellyeah.ogg");
     }
 
     protected override void Update(float delta)
     {
-        _testSound.UpdatePanning(Mouse.GetPosition(), Window.Width / 2);
-        _console.Update(delta);
+        //_testSound.UpdatePanning(Mouse.GetPosition(), Window.Width / 2);
         SceneManager.ActiveScene?.Update(delta);
+        _console.Update(delta);
     }
 
     protected override void Draw(RenderContext context)
     {
-        _console.Draw(context);
         SceneManager.ActiveScene?.Draw(context);
+        _console.Draw(context);
     }
 
     protected override void MouseMoved(MouseMoveEventArgs e)
