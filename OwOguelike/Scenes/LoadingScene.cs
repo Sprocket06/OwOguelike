@@ -10,6 +10,7 @@ public class LoadingScene : Scene
     private bool _loading = false;
     private int _stuffToDo;
     private int _stuffDone;
+    private int _sceneStuffToDo;
     private float _fadeTimer = FADE_TIME;
 
     private Scene? _sceneToLoad;
@@ -43,19 +44,19 @@ public class LoadingScene : Scene
                 {
                     Sfx.LoadClip(clip);
                 }
-
-                PercentLoaded = (int)((_stuffDone / (float)_stuffToDo) * 100);
-                var canContinue = _sceneToLoad?.LoadStep() ?? true;
-                if (_stuffDone >= _stuffToDo && canContinue)
-                {
-                    Loaded = true;
-                }
             }
             catch (Exception e)
             {
                 GameCore.Log.Error(e.Message);
             }
+
+            _sceneToLoad?.LoadStep();
             _stuffDone++;
+            PercentLoaded = (int)((_stuffDone / (float)_stuffToDo) * 100);
+            if (_stuffDone >= _stuffToDo)
+            {
+                Loaded = true;
+            }
         }
         else
         {
@@ -83,7 +84,7 @@ public class LoadingScene : Scene
     {
         _loading = true;
         QueueSfx();
-        _stuffToDo = _sfxToLoad.Count;
+        _stuffToDo = _sfxToLoad.Count + _sceneToLoad?.GetLoadSteps() ?? 0;
         _stuffDone = 0;
     }
     
@@ -96,6 +97,11 @@ public class LoadingScene : Scene
             
             if(!isMusic)
                 _sfxToLoad.Enqueue(clip);
+        }
+
+        for (int i = 0; i < 800; i++)
+        {
+            _sfxToLoad.Enqueue(AudioClip.GunReloadGeneric);
         }
     }
 }
