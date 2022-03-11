@@ -5,18 +5,25 @@ global using OwOguelike.Enums;
 global using OwOguelike.Entities;
 global using OwOguelike.Scenes.SceneManagement;
 global using OwOguelike.Scenes;
+global using OwOguelike.Attributes;
+global using OwOguelike.Audio;
+global using static OwOguelike.GameCore;
 global using OwOguelike.Input;
 
 global using Chroma;
 global using Chroma.Commander;
+global using Chroma.ContentManagement;
+global using Chroma.Audio.Sources;
+global using Chroma.Audio;
 global using Chroma.Input;
 global using Chroma.Graphics;
 global using Chroma.Input.GameControllers;
+global using Chroma.Diagnostics.Logging;
+global using Chroma.Windowing;
 
 global using System;
 global using System.Drawing;
 global using System.Numerics;
-global using static System.Math;
-global using static System.MathF;
 
-using Color = Chroma.Graphics.Color;
+global using Color = Chroma.Graphics.Color;
+global using Log = Chroma.Diagnostics.Logging.Log;
