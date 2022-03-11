@@ -1,6 +1,6 @@
 namespace OwOguelike.Entities;
 
-public class Player : Entity, IDrawable, ICollidable, IMovable
+public class Actor : Entity, IDrawable, ICollidable, IMovable
 {
     public DrawLayer Layer { get; set; } = DrawLayer.Characters;
 
