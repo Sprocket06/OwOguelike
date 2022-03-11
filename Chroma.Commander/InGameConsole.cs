@@ -30,7 +30,7 @@ namespace Chroma.Commander
         private int _maxLines;
 
         private ScrollBuffer _scrollBuffer;
-        private List<string> _scrollBufferWindow;
+        private List<ConsoleLine> _scrollBufferWindow;
 
         private InputLine _inputLine;
 
@@ -83,7 +83,7 @@ namespace Chroma.Commander
                         _ttf,
                         _scrollBufferWindow[i],
                         new(0, _ttf.Height * i),
-                        Color.White
+                        _scrollBufferWindow[i].Color
                     );
                 }
 
@@ -148,14 +148,7 @@ namespace Chroma.Commander
         {
             if (e.KeyCode == ToggleKey)
             {
-                if (_state == State.Hidden || _state == State.SlidingUp)
-                {
-                    _state = State.SlidingDown;
-                }
-                else if (_state == State.Visible || _state == State.SlidingDown)
-                {
-                    _state = State.SlidingUp;
-                }
+                Toggle();
             }
 
             if (_state != State.Visible)
@@ -213,33 +206,40 @@ namespace Chroma.Commander
             var sb = new StringBuilder();
             var strings = new List<string>();
             
-            for (var i = 0; i < input.Length; i++)
-            {
-                sb.Append(input[i]);
-                            
-                if (sb.Length >= _target.Width / 8 || i == input.Length - 1)
-                {
-                    strings.Add(sb.ToString());
-                    sb.Clear();
-                }
-            }
+            PushString(input);
             
-            var output = ProcessCommand(input);
+            PushString(ProcessCommand(input));
+        }
+
+        public void PushString(ConsoleLine line)
+        {
+            var sb = new StringBuilder();
+            var lines = new List<ConsoleLine>();
             
-            for (var i = 0; i < output.Length; i++)
+            for (var i = 0; i < line.Line.Length; i++)
             {
-                sb.Append(output[i]);
+                sb.Append(line.Line[i]);
                             
-                if (sb.Length >= _target.Width / 8 || i == output.Length - 1)
+                if (sb.Length >= _target.Width / 8 || i == line.Line.Length - 1)
                 {
-                    strings.Add(sb.ToString());
+                    lines.Add(new ConsoleLine(sb.ToString(), line.Color));
                     sb.Clear();
                 }
             }
 
-            foreach (var s in strings)
+            foreach (var s in lines)
             {
                 _scrollBuffer.Push(s);
+            }
+        }
+
+        public void PushString(string str) => PushString(new ConsoleLine(str));
+
+        public void PushStrings(string[] strings)
+        {
+            foreach (var s in strings)
+            {
+                PushString(s);
             }
         }
 

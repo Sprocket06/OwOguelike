@@ -8,7 +8,7 @@ namespace Chroma.Commander
         private int _window;
         private int _bottom;
 
-        private List<string> _lines = new();
+        private List<ConsoleLine> _lines = new();
 
         public ScrollBuffer(int window = 20)
         {
@@ -16,7 +16,7 @@ namespace Chroma.Commander
             _bottom = 0;
         }
 
-        public void Push(string line)
+        public void Push(ConsoleLine line)
         {
             _lines.Add(line);
 
@@ -44,12 +44,12 @@ namespace Chroma.Commander
             _bottom = _lines.Count - _window - 1;
         }
 
-        public List<string> GetWindow()
+        public List<ConsoleLine> GetWindow()
         {
             var lines = _lines.Skip(_bottom).Take(_window).ToList();
 
             while (lines.Count != _window)
-                lines.Insert(0, string.Empty);
+                lines.Insert(0, new ConsoleLine(string.Empty));
 
             return lines;
         }
