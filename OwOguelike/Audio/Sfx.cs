@@ -24,7 +24,7 @@ public static partial class Sfx
         catch (Exception e)
         {
             // Not our problem
-            throw new Exception($"Failed to load clip: ${path}", e);
+            throw new Exception($"Failed to load clip: {path}", e);
         }
     }
 
@@ -32,6 +32,15 @@ public static partial class Sfx
     {
         if (_builtinClips.ContainsKey(clip))
             LoadClip(_builtinClips[clip]);
+    }
+
+    [ConsoleCommand("stopsounds")]
+    public static void StopAllSounds()
+    {
+        foreach (var sound in LoadedClips.Values)
+        {
+            sound?.Stop();
+        }
     }
 
     public static Sound PlayClip(Sound sound)
