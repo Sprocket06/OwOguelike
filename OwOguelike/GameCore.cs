@@ -1,4 +1,6 @@
-﻿namespace OwOguelike;
+﻿using Chroma.Diagnostics.Logging.Sinks;
+
+namespace OwOguelike;
 
 public class GameCore : Game
 {
@@ -19,6 +21,7 @@ public class GameCore : Game
         Window = base.Window;
         RenderSettings.ShapeBlendingEnabled = true;
         _console = new InGameConsole(Window);
+        Log.SinkTo(new CommanderSink(_console));
         LoadingScene.ShowLoadingScreen<GameplayScene>();
     }
 

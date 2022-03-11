@@ -98,10 +98,5 @@ public class LoadingScene : Scene
             if(!isMusic)
                 _sfxToLoad.Enqueue(clip);
         }
-
-        for (int i = 0; i < 800; i++)
-        {
-            _sfxToLoad.Enqueue(AudioClip.GunReloadGeneric);
-        }
     }
 }
