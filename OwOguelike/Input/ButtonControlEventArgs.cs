@@ -1,7 +1,6 @@
 ﻿namespace OwOguelike.Input;
 
-public class ControlEventArgs
+public class ButtonControlEventArgs
 {
     public Control Control { get; set; }
-    public object ControlState { get; set; }
 }

@@ -12,7 +12,17 @@ public abstract class Scene
     {
     }
 
-    public virtual void ControlAction(ControlEventArgs e)
+    public virtual void ButtonControlPressed(ButtonControlEventArgs e)
+    {
+        
+    }
+
+    public virtual void ButtonControlReleased(ButtonControlEventArgs e)
+    {
+        
+    }
+
+    public virtual void AxisControlMoved(AxisControlEventArgs e)
     {
         
     }

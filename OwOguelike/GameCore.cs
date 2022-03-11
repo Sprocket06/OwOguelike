@@ -55,11 +55,43 @@ public class GameCore : Game
     protected override void MousePressed(MouseButtonEventArgs e)
     {
         SceneManager.ActiveScene?.MousePressed(e);
+
+        String inputId = "keyboard";
+        
+        if (!SheepleManager.HasPlayer(inputId))
+        {
+            SheepleManager.AddPlayer(inputId);
+        }
+        else
+        {
+            Player p = SheepleManager.GetPlayer(inputId);
+            if (p.Keymap.IsBound(e.Button))
+            {
+                Control c = p.Keymap.GetBind(e.Button);
+                SceneManager.ActiveScene?.ButtonControlPressed(new() {Control = c});
+            }
+        }
     }
 
     protected override void MouseReleased(MouseButtonEventArgs e)
     {
         SceneManager.ActiveScene?.MouseReleased(e);
+        
+        String inputId = "keyboard";
+        
+        if (!SheepleManager.HasPlayer(inputId))
+        {
+            SheepleManager.AddPlayer(inputId);
+        }
+        else
+        {
+            Player p = SheepleManager.GetPlayer(inputId);
+            if (p.Keymap.IsBound(e.Button))
+            {
+                Control c = p.Keymap.GetBind(e.Button);
+                SceneManager.ActiveScene?.ButtonControlReleased(new() {Control = c});
+            }
+        }
     }
 
     protected override void WheelMoved(MouseWheelEventArgs e)
@@ -72,6 +104,20 @@ public class GameCore : Game
     {
         _console.KeyPressed(e);
         SceneManager.ActiveScene?.KeyPressed(e);
+
+        if (!SheepleManager.HasPlayer("keyboard"))
+        {
+            SheepleManager.AddPlayer("keyboard");
+        }
+        else
+        {
+            Player p = SheepleManager.GetPlayer("keyboard");
+            if (p.Keymap.IsBound(e.KeyCode))
+            {
+                Control c = p.Keymap.GetBind(e.KeyCode);
+                SceneManager.ActiveScene?.ButtonControlPressed(new() {Control = c});
+            }
+        }
         
         if (e.KeyCode == KeyCode.Escape)
         {
@@ -82,6 +128,20 @@ public class GameCore : Game
     protected override void KeyReleased(KeyEventArgs e)
     {
         SceneManager.ActiveScene?.KeyReleased(e);
+        
+        if (!SheepleManager.HasPlayer("keyboard"))
+        {
+            SheepleManager.AddPlayer("keyboard");
+        }
+        else
+        {
+            Player p = SheepleManager.GetPlayer("keyboard");
+            if (p.Keymap.IsBound(e.KeyCode))
+            {
+                Control c = p.Keymap.GetBind(e.KeyCode);
+                SceneManager.ActiveScene?.ButtonControlReleased(new() {Control = c});
+            }
+        }
     }
 
     protected override void TextInput(TextInputEventArgs e)
@@ -103,15 +163,66 @@ public class GameCore : Game
     protected override void ControllerButtonPressed(ControllerButtonEventArgs e)
     {
         SceneManager.ActiveScene?.ControllerButtonPressed(e);
+
+        String inputId = e.Controller.Info.Guid.ToString();
+        
+        if (!SheepleManager.HasPlayer(inputId))
+        {
+            SheepleManager.AddPlayer(inputId);
+        }
+        else
+        {
+            Player p = SheepleManager.GetPlayer(inputId);
+            if (p.Keymap.IsBound(e.Button))
+            {
+                Control c = p.Keymap.GetBind(e.Button);
+                SceneManager.ActiveScene?.ButtonControlPressed(new() {Control = c});
+            }
+        }
     }
 
     protected override void ControllerButtonReleased(ControllerButtonEventArgs e)
     {
         SceneManager.ActiveScene?.ControllerButtonReleased(e);
+        
+        String inputId = e.Controller.Info.Guid.ToString();
+        
+        if (!SheepleManager.HasPlayer(inputId))
+        {
+            SheepleManager.AddPlayer(inputId);
+        }
+        else
+        {
+            Player p = SheepleManager.GetPlayer(inputId);
+            if (p.Keymap.IsBound(e.Button))
+            {
+                Control c = p.Keymap.GetBind(e.Button);
+                SceneManager.ActiveScene?.ButtonControlReleased(new() {Control = c});
+            }
+        }
     }
 
     protected override void ControllerAxisMoved(ControllerAxisEventArgs e)
     {
         SceneManager.ActiveScene?.ControllerAxisMoved(e);
+
+        if (e.Axis is not ControllerAxis.LeftTrigger or ControllerAxis.RightTrigger)
+        {
+            String inputId = e.Controller.Info.Guid.ToString();
+        
+            if (!SheepleManager.HasPlayer(inputId))
+            {
+                SheepleManager.AddPlayer(inputId);
+            }
+            else
+            {
+                Player p = SheepleManager.GetPlayer(inputId);
+                if (p.Keymap.IsBound(e.Axis))
+                {
+                    Control c = p.Keymap.GetBind(e.Axis);
+                    SceneManager.ActiveScene?.AxisControlMoved(new() {Control = c, Value = e.Value});
+                }
+            }
+        }
     }
 }
