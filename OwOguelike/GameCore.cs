@@ -1,15 +1,25 @@
-﻿
-
-namespace OwOguelike;
+﻿namespace OwOguelike;
 
 public class GameCore : Game
 {
+    public static IContentProvider? ContentProvider;
+    public static GraphicsManager GraphicsManager = null!;
+    public new static Window Window = null!;
+    public static readonly Log Log = LogManager.GetForCurrentAssembly();
+    
     private InGameConsole _console;
-    [ConsoleVariable("sv_cheats")] private static bool CheatsHehe = false;
+    [ConsoleVariable("sv_cheats")] 
+    private static bool CheatsHehe = false;
+
+    private Sound _testSound;
     
     public GameCore() : base(new(false, false))
     {
+        GraphicsManager = Graphics;
+        Window = base.Window;
+        RenderSettings.ShapeBlendingEnabled = true;
         _console = new InGameConsole(Window);
+        LoadingScene.ShowLoadingScreen<GameplayScene>();
     }
 
     [ConsoleCommand("test")]
@@ -18,8 +28,15 @@ public class GameCore : Game
         return "Debug pog!";
     }
 
+    protected override void LoadContent()
+    {
+        ContentProvider = Content;
+        _testSound = Sfx.PlayClip("hellyeah.ogg");
+    }
+
     protected override void Update(float delta)
     {
+        _testSound.UpdatePanning(Mouse.GetPosition(), Window.Width / 2);
         _console.Update(delta);
         SceneManager.ActiveScene?.Update(delta);
     }

@@ -15,4 +15,15 @@
       <ProjectReference Include="..\Chroma.Commander\Chroma.Commander.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Content" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Content\hellyeah.ogg" />
+      <EmbeddedResource Include="Content\hellyeah.ogg">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+    </ItemGroup>
+
 </Project>

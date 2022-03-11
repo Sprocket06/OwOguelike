@@ -2,6 +2,8 @@ namespace OwOguelike.Scenes.SceneManagement;
 
 public abstract class Scene
 {
+    public virtual bool LoadStep() => true;
+    
     public virtual void Draw(RenderContext context)
     {
     }

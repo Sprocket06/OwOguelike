@@ -10,7 +10,15 @@ public static class SceneManager
     {
         if (!_scenes.Exists(x => x is T))
             _scenes.Add(new T());
-
+        
         ActiveScene = _scenes.First(x => x is T);
+    }
+
+    public static void SetActiveScene(Scene scene)
+    {
+        if (!_scenes.Contains(scene))
+            _scenes.Add(scene);
+
+        ActiveScene = scene;
     }
 }
