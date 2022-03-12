@@ -10,6 +10,7 @@ global using OwOguelike.Audio;
 global using OwOguelike.Input;
 global using OwOguelike.Config;
 global using static OwOguelike.GameCore;
+global using static OwOguelike.Collision.cute_c2;
 global using OwOguelike.Levels;
 
 global using Chroma;
@@ -31,6 +32,7 @@ global using System.Drawing;
 global using System.Numerics;
 global using System.Text.Json;
 global using System.Text.Json.Nodes;
+global using System.Runtime.InteropServices;
 
 global using Color = Chroma.Graphics.Color;
 global using Log = Chroma.Diagnostics.Logging.Log;
