@@ -1,18 +1,15 @@
 ﻿namespace OwOguelike.Enums;
 
-public enum Control
+public enum ControlButton
 {
     NotBound,
     MoveUp,
     MoveDown,
     MoveLeft,
     MoveRight,
-    LeftAxisX,
-    LeftAxisY,
-    RightAxisX,
-    RightAxisY,
     Action1,
     Action2,
     Action3,
-    Action4
+    Action4,
+    Menu
 }

@@ -4,18 +4,39 @@ namespace OwOguelike.Input;
 
 public class Keymap
 {
-    private static Dictionary<Control, List<KeyCode>> DEFAULT_KEYBINDS = new Dictionary<Control, List<KeyCode>>()
+    private Dictionary<ControlButton, List<KeyCode>> _keymap = new()
     {
-        {Control.MoveUp, new() {KeyCode.W}},
-        {Control.MoveDown, new() {KeyCode.S}},
-        {Control.MoveLeft, new() {KeyCode.A}},
-        {Control.MoveRight, new() {KeyCode.D}}
+        {ControlButton.MoveUp, new() {KeyCode.W}},
+        {ControlButton.MoveDown, new() {KeyCode.S}},
+        {ControlButton.MoveLeft, new() {KeyCode.A}},
+        {ControlButton.MoveRight, new() {KeyCode.D}},
+        {ControlButton.Action3, new() {KeyCode.E}},
+        {ControlButton.Action4, new() {KeyCode.R}},
+        {ControlButton.Menu, new(){KeyCode.Escape, KeyCode.Return}}
     };
 
-    private Dictionary<Control, List<KeyCode>> _keymap = new();
-    private Dictionary<Control, List<ControllerButton>> _buttonmap = new();
-    private Dictionary<Control, List<MouseButton>> _mousemap = new();
-    private Dictionary<Control, List<ControllerAxis>> _stickmap = new();
+    private Dictionary<ControlButton, List<ControllerButton>> _buttonmap = new()
+    {
+        {ControlButton.Action1, new() {ControllerButton.LeftBumper}},
+        {ControlButton.Action2, new() {ControllerButton.RightBumper}},
+        {ControlButton.Action3, new() {ControllerButton.A}},
+        {ControlButton.Action4, new() {ControllerButton.B}},
+        {ControlButton.Menu, new() {ControllerButton.Menu}}
+    };
+
+    private Dictionary<ControlButton, List<MouseButton>> _mousemap = new()
+    {
+        {ControlButton.Action1, new() {MouseButton.Left}},
+        {ControlButton.Action2, new() {MouseButton.Right}}
+    };
+
+    private Dictionary<ControlAxis, List<ControllerAxis>> _stickmap = new()
+    {
+        {ControlAxis.LeftAxisX, new List<ControllerAxis>() {ControllerAxis.LeftStickX}},
+        {ControlAxis.LeftAxisY, new() {ControllerAxis.LeftStickY}},
+        {ControlAxis.RightAxisX, new() {ControllerAxis.RightStickX}},
+        {ControlAxis.RightAxisY, new() {ControllerAxis.RightStickY}}
+    };
 
     public void Unbind(KeyCode key)
     {
@@ -26,7 +47,7 @@ public class Keymap
             throw new InputNotBoundException();
         }
 
-        Control c = GetBind(key);
+        ControlButton c = GetBind(key);
 
         _keymap[c].Remove(key);
     }
@@ -38,7 +59,7 @@ public class Keymap
             return;
         }
 
-        Control c = GetBind(btn);
+        ControlButton c = GetBind(btn);
 
         _buttonmap[c].Remove(btn);
     }
@@ -50,7 +71,7 @@ public class Keymap
             return;
         }
 
-        Control c = GetBind(mbtn);
+        ControlButton c = GetBind(mbtn);
 
         _mousemap[c].Remove(mbtn);
     }
@@ -62,49 +83,49 @@ public class Keymap
             return;
         }
 
-        Control c = GetBind(axis);
+        ControlAxis c = GetBind(axis);
 
         _stickmap[c].Remove(axis);
     }
     
-    public void Bind(KeyCode key, Control control)
+    public void Bind(KeyCode key, ControlButton controlButton)
     {
         if (IsBound(key))
         {
             Unbind(key);
         }
         
-        _keymap[control].Add(key);
+        _keymap[controlButton].Add(key);
     }
 
-    public void Bind(ControllerButton btn, Control control)
+    public void Bind(ControllerButton btn, ControlButton controlButton)
     {
         if (IsBound(btn))
         {
             Unbind(btn);
         }
         
-        _buttonmap[control].Add(btn);
+        _buttonmap[controlButton].Add(btn);
     }
     
-    public void Bind(MouseButton mbtn, Control control)
+    public void Bind(MouseButton mbtn, ControlButton controlButton)
     {
         if (IsBound(mbtn))
         {
             Unbind(mbtn);
         }
         
-        _mousemap[control].Add(mbtn);
+        _mousemap[controlButton].Add(mbtn);
     }
 
-    public void Bind(ControllerAxis axis, Control control)
+    public void Bind(ControllerAxis axis, ControlAxis controlAxis)
     {
         if (IsBound(axis))
         {
             Unbind(axis);
         }
         
-        _stickmap[control].Add(axis);
+        _stickmap[controlAxis].Add(axis);
     }
 
     public bool IsBound(KeyCode key)
@@ -127,7 +148,7 @@ public class Keymap
         return _stickmap.Values.ToList().Exists(axes => axes.Contains(axis));
     }
 
-    public Control GetBind(KeyCode key)
+    public ControlButton GetBind(KeyCode key)
     {
         if (IsBound(key))
         {
@@ -137,7 +158,7 @@ public class Keymap
         throw new InputNotBoundException();
     }
 
-    public Control GetBind(ControllerButton btn)
+    public ControlButton GetBind(ControllerButton btn)
     {
         if (IsBound(btn))
         {
@@ -147,7 +168,7 @@ public class Keymap
         throw new InputNotBoundException();
     }
     
-    public Control GetBind(MouseButton btn)
+    public ControlButton GetBind(MouseButton btn)
     {
         if (IsBound(btn))
         {
@@ -157,7 +178,7 @@ public class Keymap
         throw new InputNotBoundException();
     }
 
-    public Control GetBind(ControllerAxis axis)
+    public ControlAxis GetBind(ControllerAxis axis)
     {
         if (IsBound(axis))
         {
