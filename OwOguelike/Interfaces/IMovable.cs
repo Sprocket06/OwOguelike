@@ -2,9 +2,10 @@ namespace OwOguelike.Interfaces;
 
 public interface IMovable
 {
-    public const float DEFAULT_FRICTION = 10f;
-    public const float DEFAULT_VELOCITY = 0f;
+    public const float MAX_VELOCITY = 200f;
     
-    public abstract float Friction { get; set; }
-    public abstract float Velocity { get; set; }
+    public abstract float MovementDeceleration { get; set; }
+    public abstract float Acceleration { get; set; }
+    public abstract float MovementAcceleration { get; set; }
+    public abstract Vector2 Velocity { get; set; }
 }

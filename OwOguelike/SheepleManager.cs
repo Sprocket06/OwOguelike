@@ -5,19 +5,24 @@ namespace OwOguelike;
 public class SheepleManager
 {
     public static List<Player> Players = new();
+    
+    //NOTE: Once config loading is a thing this should be replaced by the default control profile
+    public static Keymap DefaultProfile = new();
 
     static SheepleManager()
     {
         
     }
 
-    public static void AddPlayer(string inputId)
+    public static Player AddPlayer(string inputId)
     {
         Player p = new();
         p.Keymap = new();
         p.PlayerNum = GetNextAvailableSlot();
         p.InputID = inputId;
         Players.Add(p);
+
+        return p;
     }
 
     public static void RemovePlayer(int playerNum)

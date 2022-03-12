@@ -2,6 +2,7 @@
 
 public class AxisControlEventArgs
 {
-    public Control Control { get; set; }
+    public string DeviceId { get; set; }
+    public ControlAxis ControlAxis { get; set; }
     public short Value { get; set; }
 }

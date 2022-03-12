@@ -2,5 +2,7 @@
 
 public class ButtonControlEventArgs
 {
-    public Control Control { get; set; }
+    public string DeviceId { get; set; }
+    
+    public ControlButton ControlButton { get; set; }
 }
