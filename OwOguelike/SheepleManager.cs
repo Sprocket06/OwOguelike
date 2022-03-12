@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-namespace OwOguelike;
+﻿namespace OwOguelike;
 
 public class SheepleManager
 {
@@ -16,7 +14,7 @@ public class SheepleManager
 
     public static Player AddPlayer(string inputId)
     {
-        var p = new Player(GetNextAvailableSlot(), new Keymap(), inputId)
+        var p = new Player(GetNextAvailableSlot(), new Keymap(), inputId);
         Players.Add(p);
 
         return p;
