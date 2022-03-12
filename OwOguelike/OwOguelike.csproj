@@ -21,7 +21,12 @@
 
     <ItemGroup>
       <None Remove="Content\hellyeah.ogg" />
-      <EmbeddedResource Include="Content\hellyeah.ogg">
+      <None Remove="Content\NewHiScore.ttf" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Content\Fonts\NewHiScore.ttf" />
+      <EmbeddedResource Include="Content\Fonts\NewHiScore.ttf">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>
