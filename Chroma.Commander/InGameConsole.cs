@@ -30,7 +30,7 @@ namespace Chroma.Commander
         private int _maxLines;
 
         private ScrollBuffer _scrollBuffer;
-        private List<ConsoleLine> _scrollBufferWindow;
+        private List<ConsoleLine>? _scrollBufferWindow;
 
         private InputLine _inputLine;
 

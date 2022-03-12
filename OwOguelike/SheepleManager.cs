@@ -16,10 +16,7 @@ public class SheepleManager
 
     public static Player AddPlayer(string inputId)
     {
-        Player p = new();
-        p.Keymap = new();
-        p.PlayerNum = GetNextAvailableSlot();
-        p.InputID = inputId;
+        var p = new Player(GetNextAvailableSlot(), new Keymap(), inputId)
         Players.Add(p);
 
         return p;

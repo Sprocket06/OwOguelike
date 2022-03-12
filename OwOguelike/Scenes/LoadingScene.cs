@@ -10,7 +10,6 @@ public class LoadingScene : Scene
     private bool _loading = false;
     private int _stuffToDo;
     private int _stuffDone;
-    private int _sceneStuffToDo;
     private float _fadeTimer = FADE_TIME;
 
     private Scene? _sceneToLoad;
@@ -83,19 +82,19 @@ public class LoadingScene : Scene
     public void StartLoading()
     {
         _loading = true;
-        QueueSfx();
+        QueueAudio();
         _stuffToDo = _sfxToLoad.Count + _sceneToLoad?.GetLoadSteps() ?? 0;
         _stuffDone = 0;
     }
     
-    public void QueueSfx()
+    public void QueueAudio()
     {
         foreach (var clip in Enum.GetValues<AudioClip>())
         {
             var field = typeof(AudioClip).GetField(clip.ToString());
-            var isMusic = field!.IsDefined(typeof(MusicAttribute), false);
+            var dontLoad = field!.IsDefined(typeof(NoPreloadAttribute), false);
             
-            if(!isMusic)
+            if(!dontLoad)
                 _sfxToLoad.Enqueue(clip);
         }
     }
