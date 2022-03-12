@@ -13,11 +13,7 @@ public class SheepleManager
 
     public static void AddPlayer(string inputId)
     {
-        Player p = new();
-        p.Keymap = new();
-        p.PlayerNum = GetNextAvailableSlot();
-        p.InputID = inputId;
-        Players.Add(p);
+        Players.Add(new Player(GetNextAvailableSlot(), new Keymap(), inputId));
     }
 
     public static void RemovePlayer(int playerNum)

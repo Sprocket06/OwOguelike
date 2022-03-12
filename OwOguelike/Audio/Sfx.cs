@@ -1,5 +1,7 @@
 namespace OwOguelike.Audio;
 
+// TODO: Make an AudioSource that actually fully loads the waveform into memory and make this load those instead
+// Music should be loaded as the normal Music class because that is streamed in realtime as it should be
 public static partial class Sfx
 {
     public static readonly Dictionary<string, Sound?> LoadedClips;
