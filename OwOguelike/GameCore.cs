@@ -1,6 +1,4 @@
-﻿using Chroma.Diagnostics.Logging.Sinks;
-
-namespace OwOguelike;
+﻿namespace OwOguelike;
 
 public class GameCore : Game
 {
@@ -12,19 +10,22 @@ public class GameCore : Game
     private InGameConsole _console;
     [ConsoleVariable("sv_cheats")] 
     private static bool CheatsHehe = false;
-
-    private Sound _testSound;
+    
+    // For testing
+    private TrueTypeFont _font = null!;
     
     public GameCore() : base(new(false, false))
     {
         GraphicsManager = Graphics;
+        GraphicsManager.VerticalSyncMode = Configuration.CurrentConfig.VSync;
+        Configuration.Sync();
         Window = base.Window;
         RenderSettings.ShapeBlendingEnabled = true;
         _console = new InGameConsole(Window);
         Log.SinkTo(new CommanderSink(_console));
         LoadingScene.ShowLoadingScreen<GameplayScene>();
     }
-
+    
     [ConsoleCommand("test")]
     public static string TestDebug()
     {
@@ -34,12 +35,11 @@ public class GameCore : Game
     protected override void LoadContent()
     {
         ContentProvider = Content;
-        //_testSound = Sfx.PlayClip("hellyeah.ogg");
+        _font = ContentProvider.Load<TrueTypeFont>("Fonts/NewHiScore.ttf", 32);
     }
 
     protected override void Update(float delta)
     {
-        //_testSound.UpdatePanning(Mouse.GetPosition(), Window.Width / 2);
         SceneManager.ActiveScene?.Update(delta);
         _console.Update(delta);
     }
@@ -48,6 +48,7 @@ public class GameCore : Game
     {
         SceneManager.ActiveScene?.Draw(context);
         _console.Draw(context);
+        context.DrawString(_font, "Cum and Balls", Vector2.Zero, Color.White);
     }
 
     protected override void MouseMoved(MouseMoveEventArgs e)
@@ -59,7 +60,7 @@ public class GameCore : Game
     {
         SceneManager.ActiveScene?.MousePressed(e);
 
-        String inputId = "keyboard";
+        var inputId = "keyboard";
         
         if (!SheepleManager.HasPlayer(inputId))
         {
@@ -67,10 +68,10 @@ public class GameCore : Game
         }
         else
         {
-            Player p = SheepleManager.GetPlayer(inputId);
+            var p = SheepleManager.GetPlayer(inputId);
             if (p.Keymap.IsBound(e.Button))
             {
-                Control c = p.Keymap.GetBind(e.Button);
+                var c = p.Keymap.GetBind(e.Button);
                 SceneManager.ActiveScene?.ButtonControlPressed(new() {Control = c});
             }
         }

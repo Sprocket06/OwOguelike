@@ -1,6 +1,6 @@
 namespace OwOguelike.Attributes;
 
-public class MusicAttribute : Attribute
+public class MusicAttribute : NoPreloadAttribute
 {
     public string Name;
     public string Author;
