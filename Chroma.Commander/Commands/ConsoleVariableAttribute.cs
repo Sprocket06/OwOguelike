@@ -1,15 +1,14 @@
 ﻿using System;
 
-namespace Chroma.Commander
-{
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public class ConsoleVariableAttribute : Attribute
-    {
-        public string Name { get; }
+namespace Chroma.Commander;
 
-        public ConsoleVariableAttribute(string name)
-        {
-            Name = name;
-        }
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+public class ConsoleVariableAttribute : Attribute
+{
+    public string Name { get; }
+
+    public ConsoleVariableAttribute(string name)
+    {
+        Name = name;
     }
 }
