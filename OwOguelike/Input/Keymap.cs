@@ -38,6 +38,35 @@ public class Keymap
         {ControlAxis.RightAxisY, new() {ControllerAxis.RightStickY}}
     };
 
+    public override string ToString()
+    {
+        List<string> output = new();
+        foreach (ControlButton controlBtn in Enum.GetValues<ControlButton>())
+        {
+            List<string> binds = new();
+            
+            if(_keymap.ContainsKey(controlBtn))binds.AddRange(_keymap[controlBtn].Select(c=>"KeyCode."+c.ToString()));
+            if(_buttonmap.ContainsKey(controlBtn))binds.AddRange(_buttonmap[controlBtn].Select(c=> "ControllerButton"+c.ToString()));
+            if(_mousemap.ContainsKey(controlBtn))binds.AddRange(_mousemap[controlBtn].Select(c=>"MouseButton."+c.ToString()));
+
+            if (binds.Count == 0)
+            {
+                binds.Add("Not Bound");
+            }
+            
+            output.Add($"{controlBtn.ToString()} : {string.Join(", ", binds)}");
+        }
+
+        foreach (ControlAxis axis in Enum.GetValues<ControlAxis>())
+        {
+            output.Add(_stickmap.ContainsKey(axis)
+                ? $"{axis.ToString()} : {string.Join(", ", _stickmap[axis].Select(a => a.ToString()))}"
+                : $"{axis.ToString()} | Not Bound");
+        }
+        
+        return string.Join('\n', output);
+    }
+
     public void Unbind(KeyCode key)
     {
         if (!IsBound(key))

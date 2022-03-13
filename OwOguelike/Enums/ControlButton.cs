@@ -2,7 +2,6 @@
 
 public enum ControlButton
 {
-    NotBound,
     MoveUp,
     MoveDown,
     MoveLeft,
