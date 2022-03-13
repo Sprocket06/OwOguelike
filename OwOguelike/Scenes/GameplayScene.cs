@@ -2,10 +2,8 @@ namespace OwOguelike.Scenes;
 
 public class GameplayScene : Scene
 {
-    public Level currentLevel;
+    public Level CurrentLevel;
 
-    
-    
     public override void LoadStep()
     {
     }
@@ -14,13 +12,12 @@ public class GameplayScene : Scene
 
     public GameplayScene()
     {
-        currentLevel = new();
-        currentLevel.Entities = new();
+        CurrentLevel = new(new Size(100, 100));
     }
 
     public override void Update(float delta)
     {
-        foreach (Player p in SheepleManager.Players)
+        foreach (var p in SheepleManager.Players)
         {
             
             var puppet = p.Puppet;
@@ -79,13 +76,29 @@ public class GameplayScene : Scene
     {
         context.DrawString("Press Enter or Start to join.", new(0,0), Color.White);
         
-        foreach(var e in currentLevel.Entities)
+        for (var x = 0; x < CurrentLevel.TileMap.GetUpperBound(0); x++)
+        {
+            for (var y = 0; y < CurrentLevel.TileMap.GetUpperBound(1); y++)
+            {
+                // TODO: Will just crash until we actually have tiles to draw
+                //DrawTile(context, x, y, CurrentLevel.TileMap[x,y]);
+            }
+        }
+        
+        foreach(var e in CurrentLevel.Entities)
         {
             if (e is IDrawable)
             {
                 context.Rectangle(ShapeMode.Fill, e.Position, 10, 10, Color.Aqua);
             }
         }
+    }
+
+    private void DrawTile(RenderContext context, int x, int y, int type)
+    {
+        LevelManager.TileSpriteSheet.Position = new Vector2(x, y);
+        LevelManager.TileSpriteSheet.CurrentFrame = type;
+        LevelManager.TileSpriteSheet.Draw(context);
     }
 
     public override void ButtonControlPressed(ButtonControlEventArgs e)
@@ -103,7 +116,7 @@ public class GameplayScene : Scene
 
             newPlayer.Puppet.Position = new(100, 100);
 
-            currentLevel.Entities.Add(newPlayer.Puppet);
+            CurrentLevel.Entities.Add(newPlayer.Puppet);
         }
     }
 
@@ -121,7 +134,7 @@ public class GameplayScene : Scene
 
             newPlayer.Puppet.Position = new(100, 100);
 
-            currentLevel.Entities.Add(newPlayer.Puppet);
+            CurrentLevel.Entities.Add(newPlayer.Puppet);
         }
     }
 }

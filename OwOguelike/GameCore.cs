@@ -1,4 +1,6 @@
-﻿namespace OwOguelike;
+﻿using System.Reflection;
+
+namespace OwOguelike;
 
 public class GameCore : Game
 {
@@ -7,12 +9,11 @@ public class GameCore : Game
     public new static Window Window = null!;
     public static readonly Log Log = LogManager.GetForCurrentAssembly();
     
+    public static ScanCode ConsoleKey { get; } = ScanCode.Grave;
+    
     private InGameConsole _console;
     [ConsoleVariable("sv_cheats")] 
     private static bool CheatsHehe = false;
-    
-    // For testing
-    private TrueTypeFont _font = null!;
     
     public GameCore() : base(new(false, false))
     {
@@ -21,7 +22,7 @@ public class GameCore : Game
         Configuration.Sync();
         Window = base.Window;
         RenderSettings.ShapeBlendingEnabled = true;
-        _console = new InGameConsole(Window);
+        _console = new InGameConsole(Window, 20, Assembly.GetExecutingAssembly(), Program.ConsoleWarning);
         Log.SinkTo(new CommanderSink(_console));
         LoadingScene.ShowLoadingScreen<GameplayScene>();
     }
@@ -35,7 +36,6 @@ public class GameCore : Game
     protected override void LoadContent()
     {
         ContentProvider = Content;
-        _font = ContentProvider.Load<TrueTypeFont>("Fonts/NewHiScore.ttf", 32);
     }
 
     protected override void Update(float delta)
@@ -48,7 +48,6 @@ public class GameCore : Game
     {
         SceneManager.ActiveScene?.Draw(context);
         _console.Draw(context);
-        context.DrawString(_font, "Cum and Balls", Vector2.Zero, Color.White);
     }
 
     protected override void MouseMoved(MouseMoveEventArgs e)
@@ -106,7 +105,15 @@ public class GameCore : Game
 
     protected override void KeyPressed(KeyEventArgs e)
     {
+        if (e.ScanCode == ConsoleKey)
+        {
+            _console.Toggle();
+        }
         _console.KeyPressed(e);
+        
+        if (_console.IsOpen())
+            return;
+
         SceneManager.ActiveScene?.KeyPressed(e);
 
         if (!SheepleManager.HasPlayer("keyboard"))
@@ -135,6 +142,9 @@ public class GameCore : Game
 
     protected override void KeyReleased(KeyEventArgs e)
     {
+        if (_console.IsOpen())
+            return;
+        
         SceneManager.ActiveScene?.KeyReleased(e);
         
         if (!SheepleManager.HasPlayer("keyboard"))

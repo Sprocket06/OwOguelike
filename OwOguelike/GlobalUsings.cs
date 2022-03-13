@@ -9,8 +9,9 @@ global using OwOguelike.Attributes;
 global using OwOguelike.Audio;
 global using OwOguelike.Input;
 global using OwOguelike.Config;
-global using static OwOguelike.GameCore;
 global using OwOguelike.Levels;
+global using OwOguelike.Graphics;
+global using static OwOguelike.GameCore;
 
 global using Chroma;
 global using Chroma.Commander;

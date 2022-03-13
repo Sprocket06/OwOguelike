@@ -29,6 +29,9 @@
       <EmbeddedResource Include="Content\Fonts\NewHiScore.ttf">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
+      <EmbeddedResource Include="Content\Textures\TileMap.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 
 </Project>
