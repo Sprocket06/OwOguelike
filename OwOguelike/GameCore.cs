@@ -63,7 +63,11 @@ public class GameCore : Game
         
         if (!SheepleManager.HasPlayer(inputId))
         {
-            SheepleManager.AddPlayer(inputId);
+            if (SheepleManager.DefaultProfile.IsBound(e.Button))
+            {
+                ControlButton c = SheepleManager.DefaultProfile.GetBind(e.Button);
+                SceneManager.ActiveScene?.ButtonControlPressed(new(){DeviceId = "keyboard", ControlButton = c});
+            }
         }
         else
         {
@@ -84,7 +88,11 @@ public class GameCore : Game
         
         if (!SheepleManager.HasPlayer(inputId))
         {
-            SheepleManager.AddPlayer(inputId);
+            if (SheepleManager.DefaultProfile.IsBound(e.Button))
+            {
+                ControlButton c = SheepleManager.DefaultProfile.GetBind(e.Button);
+                SceneManager.ActiveScene?.ButtonControlReleased(new(){DeviceId = "keyboard", ControlButton = c});
+            }
         }
         else
         {

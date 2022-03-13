@@ -44,29 +44,34 @@ public class GameplayScene : Scene
                 {
                     playerMovement.X += 1;
                 }
-
-                Vector2 newVelocity = new(0, 0);
-                if (playerMovement.X != 0)
+                
+                // intended angle of acceleration
+                if (playerMovement.X == 0 && playerMovement.Y == 0)
                 {
-                    newVelocity.X = Math.Min(IMovable.MAX_VELOCITY, movable.Velocity.X + (movable.MovementAcceleration * delta));
+                    
+                    float speed = movable.Velocity.Length();
+                    speed = Math.Max(0, speed - movable.MovementDeceleration * delta);
+                    if (speed == 0) movable.Velocity = Vector2.Zero;
+                    else movable.Velocity = Vector2.Normalize(movable.Velocity) * speed;
                 }
                 else
                 {
-                    newVelocity.X = Math.Max(0, movable.Velocity.X - (movable.MovementDeceleration * delta));
-                }
-                if (playerMovement.Y != 0)
-                {
-                    newVelocity.Y = Math.Min(IMovable.MAX_VELOCITY,
-                        movable.Velocity.Y + (movable.MovementAcceleration * delta));
-                }
-                else
-                {
-                    newVelocity.Y = Math.Max(0, movable.Velocity.Y - (movable.MovementDeceleration * delta));
-                }
+                    playerMovement = Vector2.Normalize(playerMovement);
+                    //now we multiply by our base accel * dt
+                    playerMovement = playerMovement * movable.MovementAcceleration * delta;
 
-                movable.Velocity = newVelocity;
+                    // we now have our actual acceleration (change in velocity) for this frame
+                    // we then apply this change in velocity to our velocity
+                    movable.Velocity = playerMovement + movable.Velocity;
 
-                puppet.Position = puppet.Position + movable.Velocity * playerMovement * delta;
+                    // now we need to make sure the total magnitude of our velocity is capped at our maximum
+                    float speed = movable.Velocity.Length();
+                    if (speed > IMovable.MAX_VELOCITY)
+                        movable.Velocity = Vector2.Normalize(movable.Velocity) * IMovable.MAX_VELOCITY;
+                    
+                }
+                // now we apply velocity as movement over time as per usual
+                puppet.Position += movable.Velocity * delta;
             }
             
         }
