@@ -14,7 +14,7 @@ public class LoadingScene : Scene
 
     private Scene? _sceneToLoad;
 
-    private Queue<AudioClip> _sfxToLoad = new();
+    private Queue<Action> _actionQueue = new();
 
     public LoadingScene(Scene? postScene = null)
     {
@@ -39,9 +39,9 @@ public class LoadingScene : Scene
         {
             try
             {
-                if (_sfxToLoad.TryDequeue(out var clip))
+                if (_actionQueue.TryDequeue(out var action))
                 {
-                    Sfx.LoadClip(clip);
+                    action();
                 }
             }
             catch (Exception e)
@@ -82,8 +82,9 @@ public class LoadingScene : Scene
     public void StartLoading()
     {
         _loading = true;
+        _actionQueue.Enqueue(LevelManager.LoadTiles);
         QueueAudio();
-        _stuffToDo = _sfxToLoad.Count + _sceneToLoad?.GetLoadSteps() ?? 0;
+        _stuffToDo = _actionQueue.Count + _sceneToLoad?.GetLoadSteps() ?? 0;
         _stuffDone = 0;
     }
     
@@ -95,7 +96,7 @@ public class LoadingScene : Scene
             var dontLoad = field!.IsDefined(typeof(NoPreloadAttribute), false);
             
             if(!dontLoad)
-                _sfxToLoad.Enqueue(clip);
+                _actionQueue.Enqueue(() => Sfx.LoadClip(clip));
         }
     }
 }

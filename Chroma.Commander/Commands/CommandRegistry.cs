@@ -12,10 +12,12 @@ namespace Chroma.Commander
         public Dictionary<string, FieldInfo> ConFields;
 
         private Assembly _assembly;
+        private bool _helpCommand;
 
-        internal CommandRegistry(Assembly assembly)
+        internal CommandRegistry(Assembly assembly, bool addHelp = true)
         {
             _assembly = assembly;
+            _helpCommand = addHelp;
             RefreshItems();
         }
 
@@ -61,6 +63,20 @@ namespace Chroma.Commander
                     }
                 }
             }
+            
+            if(_helpCommand)
+                Commands.Add("help", GetType().GetMethod(nameof(HelpCommand), BindingFlags.NonPublic | BindingFlags.Instance));
+        }
+
+        internal string HelpCommand()
+        {
+            return "=== Commands ===\n" +
+                   string.Concat(Commands.Select(c => c.Key != "help" ? 
+                       $"{c.Key}({string.Join(", ", c.Value.GetParameters().Select(p => $"{p.ParameterType.Name} {p.Name}"))}) | {c.Value.DeclaringType}\n"
+                       : "")) +
+                   "=== ConVars ===\n" +
+                   string.Concat(ConFields.Select(c => $"{c.Key} | {c.Value.DeclaringType}\n")) +
+                   string.Concat(ConProps.Select(c => $"{c.Key} | {c.Value.DeclaringType}\n"));
         }
 
         internal string Call(string name, params object[] args)
@@ -70,21 +86,21 @@ namespace Chroma.Commander
                 if (Commands.ContainsKey(name))
                 {
                     var pAmount = Commands[name].GetParameters().Length;
-                    return Commands[name].Invoke(null, args[0..pAmount])?.ToString();
+                    return Commands[name].Invoke(this, args[0..pAmount])?.ToString();
                 }
                 else if (ConProps.ContainsKey(name))
                 {
                     if (args.Length != 0)
                         ConProps[name].SetValue(null, CastObjTo(args[0], ConProps[name].PropertyType));
 
-                    return ToString(ConProps[name].GetValue(null));
+                    return ToString(ConProps[name].GetValue(this));
                 }
                 else if (ConFields.ContainsKey(name))
                 {
                     if (args.Length != 0)
                         ConFields[name].SetValue(null, CastObjTo(args[0], ConFields[name].FieldType));
                     
-                    return ToString(ConFields[name].GetValue(null));
+                    return ToString(ConFields[name].GetValue(this));
                 }
 
                 return "This command was not recognized.";

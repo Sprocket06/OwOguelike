@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
@@ -9,7 +8,6 @@ using Chroma.Graphics.TextRendering.TrueType;
 using Chroma.Input;
 using Chroma.MemoryManagement;
 using Chroma.Windowing;
-using Color = Chroma.Graphics.Color;
 
 namespace Chroma.Commander
 {
@@ -38,10 +36,12 @@ namespace Chroma.Commander
 
         private CommandRegistry _registry;
 
-        public float SlidingSpeed { get; set; } = 2000;
-        public KeyCode ToggleKey { get; set; } = KeyCode.Grave;
+        public string Motd { get; set; } = 
+            $"{Assembly.GetEntryAssembly()!.GetName().Name} Version {Assembly.GetEntryAssembly()!.GetName().Version}";
 
-        public InGameConsole(Window window, int maxLines = 20, Assembly? assembly = null)
+        public float SlidingSpeed { get; set; } = 2000;
+
+        public InGameConsole(Window window, int maxLines = 20, Assembly? assembly = null, string? motd = null)
         {
             _window = window;
             _maxLines = maxLines;
@@ -61,6 +61,9 @@ namespace Chroma.Commander
                 HandleUserInput
             );
             _registry = new CommandRegistry(assembly ?? Assembly.GetCallingAssembly());
+            if (motd is not null)
+                Motd = motd;
+            PushStrings(Motd.Split("\n"));
         }
 
         public void RefreshConVars()
@@ -146,11 +149,6 @@ namespace Chroma.Commander
 
         public void KeyPressed(KeyEventArgs e)
         {
-            if (e.KeyCode == ToggleKey)
-            {
-                Toggle();
-            }
-
             if (_state != State.Visible)
                 return;
 
@@ -168,6 +166,8 @@ namespace Chroma.Commander
                 _state = State.SlidingUp;
             }
         }
+
+        public bool IsOpen() => _state != State.Hidden;
 
         public void TextInput(TextInputEventArgs e)
         {
@@ -213,6 +213,9 @@ namespace Chroma.Commander
 
         public void PushString(ConsoleLine line)
         {
+            if (string.IsNullOrEmpty(line.Line))
+                line.Line = string.Empty;
+            
             var sb = new StringBuilder();
             var lines = new List<ConsoleLine>();
             
@@ -220,7 +223,7 @@ namespace Chroma.Commander
             {
                 sb.Append(line.Line[i]);
                             
-                if (sb.Length >= _target.Width / 8 || i == line.Line.Length - 1)
+                if (line.Line[i] == '\n' || sb.Length >= _target.Width / 8 || i == line.Line.Length - 1)
                 {
                     lines.Add(new ConsoleLine(sb.ToString(), line.Color));
                     sb.Clear();
