@@ -184,7 +184,7 @@ public class CommandRegistry
         }
         catch (TargetInvocationException e)
         {
-            throw new CommandParameterException($"\"{obj}\" is not parseable as required parameter type \"{type}\"");
+            throw new CommandParameterException($"\"{obj}\" is not parseable as required parameter type \"{type.Name}\"");
         }
     }
 

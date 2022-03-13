@@ -64,7 +64,9 @@ public class InGameConsole : DisposableResource
         _registry = new CommandRegistry(assembly ?? Assembly.GetCallingAssembly());
         if (motd is not null)
             Motd = motd;
-        PushStrings(Motd.Split("\n"));
+        
+        if(!string.IsNullOrWhiteSpace(Motd))
+            PushString(Motd);
     }
 
     public void RefreshConVars()

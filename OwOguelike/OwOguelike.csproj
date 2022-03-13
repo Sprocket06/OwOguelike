@@ -8,33 +8,28 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Chroma" Version="0.52.2" />
+        <PackageReference Include="Chroma" Version="0.52.2"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Chroma.Commander\Chroma.Commander.csproj" />
+        <ProjectReference Include="..\Chroma.Commander\Chroma.Commander.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Content" />
+        <None Update="cute_c2.dll">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Content\Fonts\NewHiScore.ttf">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="Content\Textures\TileMap.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Content\hellyeah.ogg" />
-      <None Remove="Content\NewHiScore.ttf" />
-      <None Update="cute_c2.dll">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Content\Fonts\NewHiScore.ttf" />
-      <EmbeddedResource Include="Content\Fonts\NewHiScore.ttf">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Content\Textures\TileMap.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
+        <None Remove="Content\motd.txt"/>
+        <EmbeddedResource Include="Content\motd.txt"/>
     </ItemGroup>
 
 </Project>
