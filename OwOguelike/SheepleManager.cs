@@ -20,6 +20,16 @@ public class SheepleManager
         return p;
     }
 
+    [ConsoleCommand("get_binds")]
+    public static Keymap GetBinds(int playerNum = 0)
+    {
+        if (Players.Exists(p => p.PlayerNum == playerNum))
+        {
+            return Players.First(p => p.PlayerNum == playerNum).Keymap;
+        }
+        return DefaultProfile;
+    }
+    
     public static void RemovePlayer(int playerNum)
     {
         Players.RemoveAll(p => p.PlayerNum == playerNum);
