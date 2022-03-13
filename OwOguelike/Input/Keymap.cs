@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-
-namespace OwOguelike.Input;
+﻿namespace OwOguelike.Input;
 
 public class Keymap
 {

@@ -1,4 +1,3 @@
-using System;
 using Chroma.Graphics;
 
 namespace Chroma.Commander;
