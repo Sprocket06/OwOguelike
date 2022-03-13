@@ -248,7 +248,7 @@ namespace Chroma.Commander
 
         private string ProcessCommand(string input)
         {
-            var split = input.Split(' ');
+            var split = input.Trim().Split(' ');
 
             var args = new object[split.Length - 1];
             for (var i = 1; i < split.Length; i++)
