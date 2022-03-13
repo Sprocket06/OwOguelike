@@ -22,6 +22,9 @@
     <ItemGroup>
       <None Remove="Content\hellyeah.ogg" />
       <None Remove="Content\NewHiScore.ttf" />
+      <None Update="cute_c2.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
