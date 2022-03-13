@@ -28,9 +28,9 @@ public class GameCore : Game
     }
     
     [ConsoleCommand("test")]
-    public static string TestDebug()
+    public static string TestDebug(int test = 1, string test2 = "gaming")
     {
-        return "Debug pog!";
+        return test.ToString() + test2;
     }
 
     protected override void LoadContent()
