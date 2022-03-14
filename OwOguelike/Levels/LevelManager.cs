@@ -17,6 +17,8 @@ public class LevelManager
         }
     }
 
+    public static Level? ActiveLevel;
+
     public static void LoadTiles()
     {
         try

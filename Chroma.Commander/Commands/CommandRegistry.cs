@@ -208,7 +208,7 @@ public class CommandRegistry : ICommandRegistry
         catch (TargetInvocationException e)
         {
             throw new CommandParameterException(
-                $"\"{obj}\" is not parseable as required parameter type \"{type.Name}\"");
+                $"\"{obj}\" is not parseable as required parameter type \"{type.Name}\"", e);
         }
     }
 
