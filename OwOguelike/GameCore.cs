@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace OwOguelike;
+﻿namespace OwOguelike;
 
 public class GameCore : Game
 {
@@ -12,9 +10,6 @@ public class GameCore : Game
     public static ScanCode ConsoleKey { get; } = ScanCode.Grave;
     
     private readonly InGameConsole _console;
-    
-    [ConsoleVariable("sv_cheats")] 
-    private static bool CheatsHehe = false;
     
     public GameCore() : base(new(false, false))
     {
@@ -57,6 +52,32 @@ public class GameCore : Game
     {
         SceneManager.ActiveScene?.Draw(context);
         _console.Draw(context);
+        
+        // Debug stuff
+        if (DebugVars.ShowFPS >= 1)
+        {
+            List<string> debugInfo = new();
+            debugInfo.Add(PerformanceCounter.FPS.ToString() + " FPS");
+            
+            if (DebugVars.ShowFPS >= 2)
+            {
+                debugInfo[0] += $" {PerformanceCounter.Delta.ToString("0.00")}ms";
+                debugInfo.Add(SceneManager.ActiveScene?.GetType().Name ?? "No Loaded Scene");
+            }
+
+            if (DebugVars.ShowFPS >= 3)
+            {
+                //debugInfo.Add(SceneManager.ActiveScene?.GetType().Name ?? "No Loaded Level");
+            }
+
+            var y = 4;
+            for (var i = 0; i < debugInfo.Count; i++)
+            {
+                var measure = TrueTypeFont.Default.Measure(debugInfo[i]);
+                context.DrawString(debugInfo[i], Window.Width - measure.Width - 4, y, Color.White);
+                y += measure.Height + 4;
+            }
+        }
     }
 
     protected override void MouseMoved(MouseMoveEventArgs e)

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Chroma.Graphics;
 using Chroma.Graphics.TextRendering.TrueType;
@@ -23,6 +25,10 @@ internal class InputLine
 
     private int _blinkClock;
     private bool _showCursor;
+    
+    private Stack<string> _historyBuffer;
+    private int _historyPointer;
+    private string _previousInput = string.Empty;
 
     public InputLine(Vector2 position, TrueTypeFont ttf, int maxCols, Action<string> inputHandler)
     {
@@ -31,6 +37,8 @@ internal class InputLine
 
         _inputHandler = inputHandler;
         _maxCols = maxCols;
+        _historyBuffer = new();
+        ResetHistory(true);
     }
 
     public void Update(float delta)
@@ -95,6 +103,7 @@ internal class InputLine
         {
             _currentCol++;
         }
+        ResetHistory(true);
     }
 
     public void KeyPressed(KeyEventArgs e)
@@ -105,7 +114,9 @@ internal class InputLine
             case KeyCode.NumEnter:
             {
                 _inputHandler?.Invoke(_input);
+                _historyBuffer.Push(_input);
                 _input = string.Empty;
+                ResetHistory(true);
 
                 _currentIndex = 0;
                 _currentCol = 0;
@@ -116,10 +127,14 @@ internal class InputLine
             case KeyCode.Backspace:
             {
                 if (_currentIndex == 0)
+                {
+                    ResetHistory(true);
                     return;
+                }
 
                 _input = _input.Substring(0, _currentIndex - 1) +
                          _input.Substring(_currentIndex, _input.Length - _currentIndex);
+                ResetHistory(true);
 
                 _currentIndex--;
 
@@ -136,6 +151,7 @@ internal class InputLine
                 
             case KeyCode.Left:
             {
+                ResetHistory();
                 if (_currentCol <= 0)
                     return;
 
@@ -154,6 +170,7 @@ internal class InputLine
                 
             case KeyCode.Right:
             {
+                ResetHistory();
                 if (_currentIndex >= _input.Length)
                     return;
 
@@ -167,6 +184,18 @@ internal class InputLine
                 {
                     _currentCol++;
                 }
+                break;
+            }
+
+            case KeyCode.Up:
+            {
+                ScrollHistory(true);
+                break;
+            }
+
+            case KeyCode.Down:
+            {
+                ScrollHistory(false);
                 break;
             }
                 
@@ -202,6 +231,46 @@ internal class InputLine
                 _input = _input.Remove(_currentIndex, 1);
                 break;
             }
+        }
+    }
+
+    private void ResetHistory(bool force = false)
+    {
+        _historyPointer = -1;
+        if(force || !string.IsNullOrWhiteSpace(_input))
+            _previousInput = _input;
+    }
+
+    private void ScrollHistory(bool up)
+    {
+        if (!up && _historyPointer <= 0)
+        {
+            // Set it to previous input so if you clear, then press up again
+            // It uses your previous filter until another key is pressed
+            _historyPointer = -1;
+            SetInput(_previousInput);
+            return;
+        }
+        
+        var filteredStack = _historyBuffer.Where(h => h.StartsWith(_previousInput));
+        var newPointer = _historyPointer + (up ? 1 : -1);
+        if (filteredStack.Count() - 1 >= newPointer)
+        {
+            _historyPointer = newPointer;
+            SetInput(filteredStack.ElementAt(_historyPointer));
+        }
+    }
+
+    private void SetInput(string input)
+    {
+        _input = input;
+        _currentIndex = _input.Length;
+                    
+        _currentCol = Math.Min(_currentIndex, _maxCols);
+        if (_currentCol + 1 >= _maxCols)
+        {
+            _currentCol--;
+            _margin = _input.Length - _maxCols + 1;
         }
     }
 }
