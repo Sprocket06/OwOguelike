@@ -27,7 +27,7 @@ public class GameplayScene : Scene
             var puppet = p.Puppet;
             if (puppet is IMovable movable)
             {
-                var playerMovement = p.ControlState.AssembleVector(ControlAxis.LeftAxisX, ControlAxis.LeftAxisY);
+                var playerMovement = p.AssembleVector(ControlAxis.LeftAxisX, ControlAxis.LeftAxisY);
 
                 // intended angle of acceleration
                 if (playerMovement.X == 0 && playerMovement.Y == 0)
@@ -98,7 +98,7 @@ public class GameplayScene : Scene
         if (SheepleManager.HasPlayer(e.DeviceId))
         {
             var player = SheepleManager.GetPlayer(e.DeviceId);
-            player.ControlState.SetButton(e.ControlButton, true);
+            SetButtonAndMap(player, e.ControlButton, true);
         }
         else if (e.ControlButton is ControlButton.Menu) // yeah this control flow is a bit wack deal with it
         {
@@ -116,7 +116,7 @@ public class GameplayScene : Scene
         if (SheepleManager.HasPlayer(e.DeviceId))
         {
             var player = SheepleManager.GetPlayer(e.DeviceId);
-            player.ControlState.SetButton(e.ControlButton, false);
+            SetButtonAndMap(player, e.ControlButton, false);
         }
         else if (e.ControlButton is ControlButton.Menu) // yeah this control flow is a bit wack deal with it
         {
@@ -134,7 +134,22 @@ public class GameplayScene : Scene
         if (SheepleManager.HasPlayer(e.DeviceId))
         {
             var player = SheepleManager.GetPlayer(e.DeviceId);
-            player.ControlState.SetAxis(e.ControlAxis, e.Value);
+            player.ControlState.Axes[e.ControlAxis] = e.Value;
+        }
+    }
+
+    private void SetButtonAndMap(Player p, ControlButton b, bool pressed)
+    {
+        var btns = p.ControlState.Buttons;
+        var axes = p.ControlState.Axes;
+        btns[b] = pressed;
+
+        if (b is ControlButton.MoveDown or ControlButton.MoveLeft or ControlButton.MoveRight or ControlButton.MoveUp)
+        {
+            axes[ControlAxis.LeftAxisX] = (short)((btns[ControlButton.MoveLeft] ? -short.MaxValue : 0) +
+                                                   (btns[ControlButton.MoveRight] ? short.MaxValue : 0));
+            axes[ControlAxis.LeftAxisY] = (short)((btns[ControlButton.MoveUp] ? -short.MaxValue : 0) +
+                                                  (btns[ControlButton.MoveDown] ? short.MaxValue : 0));
         }
     }
 }
