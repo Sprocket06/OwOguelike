@@ -4,6 +4,7 @@ global using Chroma;
 global using Chroma.Graphics;
 global using Chroma.Input;
 global using Chroma.Graphics.TextRendering;
+global using Chroma.Graphics.TextRendering.TrueType;
 global using Color = Chroma.Graphics.Color;
 
 global using System;
