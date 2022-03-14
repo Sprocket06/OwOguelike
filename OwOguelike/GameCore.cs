@@ -26,7 +26,7 @@ public class GameCore : Game
             using (var reader = new StreamReader(motdResource))
                 motd = reader.ReadToEnd();
 
-        _console = new InGameConsole(Window, 20, assembly, motd);
+        _console = new InGameConsole(Window, 20, null, motd);
         Log.SinkTo(new CommanderSink(_console));
         LoadingScene.ShowLoadingScreen<GameplayScene>();
     }

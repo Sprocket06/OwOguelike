@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Chroma.Commander;
 
-public class CommandRegistry
+public class CommandRegistry : ICommandRegistry
 {
     public Dictionary<string, List<MethodInfo>> Commands;
     public Dictionary<string, PropertyInfo> ConProps;
@@ -23,7 +23,7 @@ public class CommandRegistry
         RefreshItems();
     }
 
-    internal void RefreshItems()
+    public void RefreshItems()
     {
         Commands = new();
         ConProps = new();
@@ -114,12 +114,14 @@ public class CommandRegistry
         var cmdHeader = "=== Commands ===";
         var varHeader = "=== ConVars ===";
         var typeHeader = "=== Declaring Type ===";
-        var firstColumn = new List<string>() { cmdHeader }.Concat(Commands.Where(kvp => kvp.Key != "help" && !HiddenKeys.Contains(kvp.Key))
+        var firstColumn = new List<string>() { cmdHeader }.Concat(Commands
+                .Where(kvp => kvp.Key != "help" && !HiddenKeys.Contains(kvp.Key))
                 .Select(c => $"{c.Key}({GetSignature(c.Value.OrderBy(m => m.GetParameters().Length).Last())})"))
             .Concat(new List<string>() { varHeader })
             .Concat(ConFields.Where(c => !HiddenKeys.Contains(c.Key)).Select(c => c.Key))
             .Concat(ConProps.Where(c => !HiddenKeys.Contains(c.Key)).Select(c => c.Key));
-        var secondColumn = new List<string>() { typeHeader }.Concat(Commands.Where(kvp => kvp.Key != "help" && !HiddenKeys.Contains(kvp.Key))
+        var secondColumn = new List<string>() { typeHeader }.Concat(Commands
+                .Where(kvp => kvp.Key != "help" && !HiddenKeys.Contains(kvp.Key))
                 .Select(c => $"| {c.Value.First().DeclaringType}"))
             .Concat(new List<string>() { typeHeader })
             .Concat(ConFields.Where(c => !HiddenKeys.Contains(c.Key)).Select(c => c.Value.DeclaringType!.ToString()))
@@ -155,10 +157,11 @@ public class CommandRegistry
         return args;
     }
 
-    public string? GetAutoComplete(int offset) =>
-        Commands.Keys.Concat(ConProps.Keys).Concat(ConFields.Keys).Where(s => !HiddenKeys.Contains(s)).ElementAtOrDefault(offset);
+    public string? GetAutoComplete(string input, int offset) =>
+        Commands.Keys.Concat(ConProps.Keys).Concat(ConFields.Keys).Where(s => !HiddenKeys.Contains(s) && s.StartsWith(input)).OrderBy(s => s)
+            .ElementAtOrDefault(offset);
 
-    internal string Call(string name, params object[] args)
+    public string Call(string name, params object[] args)
     {
         try
         {

@@ -35,14 +35,14 @@ public class InGameConsole : DisposableResource
 
     private State _state = State.Hidden;
 
-    private CommandRegistry _registry;
+    private ICommandRegistry _registry;
 
     public string Motd { get; set; } = 
         $"{Assembly.GetEntryAssembly()!.GetName().Name} Version {Assembly.GetEntryAssembly()!.GetName().Version}";
 
     public float SlidingSpeed { get; set; } = 2000;
 
-    public InGameConsole(Window window, int maxLines = 20, Assembly? assembly = null, string? motd = null, int historySize = 20)
+    public InGameConsole(Window window, int maxLines = 20, ICommandRegistry? registry = null, string? motd = null, int historySize = 20)
     {
         _window = window;
         _maxLines = maxLines;
@@ -55,14 +55,15 @@ public class InGameConsole : DisposableResource
 
         _offset.Y = -_target.Height;
         _scrollBuffer = new ScrollBuffer(maxLines);
+        _registry = registry ?? new CommandRegistry(Assembly.GetCallingAssembly());
         _inputLine = new InputLine(
+            _registry,
             new(0, maxLines * _ttf.Height + 4),
             _ttf, 
             _target.Width / 8,
             HandleUserInput,
             historySize
         );
-        _registry = new CommandRegistry(assembly ?? Assembly.GetCallingAssembly());
         if (motd is not null)
             Motd = motd;
         
