@@ -1,7 +1,6 @@
 // ReSharper disable RedundantUsingDirective.Global
 
 global using OwOguelike.Interfaces;
-global using OwOguelike.Enums;
 global using OwOguelike.Entities;
 global using OwOguelike.Scenes.SceneManagement;
 global using OwOguelike.Scenes;
@@ -34,6 +33,7 @@ global using System.Drawing;
 global using System.Numerics;
 global using System.Text.Json;
 global using System.Text.Json.Nodes;
+global using System.Text.Json.Serialization;
 global using System.Runtime.InteropServices;
 global using System.Reflection;
 

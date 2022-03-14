@@ -24,6 +24,7 @@ public class Configuration
     public Dictionary<string, Keymap> Profiles { get; set; } = new(); //{"keyboard", SheepleManager.DefaultProfile};
     public VerticalSyncMode VSync { get; set; } = VerticalSyncMode.None;
     public bool MuteAudioOutOfFocus { get; set; }= true;
+    public float StickDeadzone = 0.2f;
 
     static Configuration()
     {

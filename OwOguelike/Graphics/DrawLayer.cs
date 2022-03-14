@@ -1,4 +1,4 @@
-namespace OwOguelike.Enums;
+namespace OwOguelike.Graphics;
 
 public enum DrawLayer
 {
