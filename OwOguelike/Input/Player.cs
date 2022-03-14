@@ -28,7 +28,7 @@ public class Player
     public short GetAxis(ControlAxis axis)
     {
         var val = GetRawAxis(axis);
-        return Math.Abs((float)val) / short.MaxValue < Configuration.CurrentConfig.StickDeadzone ? (short)0 : val;
+        return Math.Abs((float)val) / short.MaxValue < Profile.ControllerDeadzone ? (short)0 : val;
     }
 
     public float GetNormalizedAxis(ControlAxis axis)

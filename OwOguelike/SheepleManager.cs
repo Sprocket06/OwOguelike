@@ -13,8 +13,19 @@ public class SheepleManager
 
     public static Player AddPlayer(string inputId)
     {
-        var p = new Player(GetNextAvailableSlot(),
-            Configuration.CurrentConfig.SavedProfiles.GetValueOrDefault(inputId, new ControlProfile()), inputId);
+        ControlProfile profile;
+        // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+        if (Configuration.CurrentConfig.ProfileMap.TryGetValue(inputId, out var profileName))
+        {
+            profile = Configuration.CurrentConfig.SavedProfiles.GetValueOrDefault(profileName, DefaultProfile);
+        }
+        else
+        {
+            profile = Configuration.CurrentConfig.SavedProfiles.GetValueOrDefault(
+                Configuration.CurrentConfig.DefaultProfile, DefaultProfile);
+        }
+
+        var p = new Player(GetNextAvailableSlot(), profile, inputId);
         Players.Add(p);
 
         return p;
