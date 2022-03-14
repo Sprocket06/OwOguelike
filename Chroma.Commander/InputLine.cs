@@ -30,14 +30,14 @@ internal class InputLine
     private int _historyPointer;
     private string _previousInput = string.Empty;
 
-    public InputLine(Vector2 position, TrueTypeFont ttf, int maxCols, Action<string> inputHandler)
+    public InputLine(Vector2 position, TrueTypeFont ttf, int maxCols, Action<string> inputHandler, int historySize)
     {
         Position = position;
         _ttf = ttf;
 
         _inputHandler = inputHandler;
         _maxCols = maxCols;
-        _historyBuffer = new();
+        _historyBuffer = new(historySize);
         ResetHistory(true);
     }
 
@@ -261,7 +261,7 @@ internal class InputLine
         }
     }
 
-    private void SetInput(string input)
+    internal void SetInput(string input)
     {
         _input = input;
         _currentIndex = _input.Length;

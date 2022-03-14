@@ -11,6 +11,7 @@ public class CommandRegistry
     public Dictionary<string, PropertyInfo> ConProps;
     public Dictionary<string, FieldInfo> ConFields;
     public Dictionary<Type, List<MethodInfo>> Converters;
+    public List<string> HiddenKeys;
 
     private Assembly _assembly;
     private bool _helpCommand;
@@ -24,26 +25,29 @@ public class CommandRegistry
 
     internal void RefreshItems()
     {
-        Commands = new Dictionary<string, List<MethodInfo>>();
-        ConProps = new Dictionary<string, PropertyInfo>();
-        ConFields = new Dictionary<string, FieldInfo>();
-        Converters = new Dictionary<Type, List<MethodInfo>>();
+        Commands = new();
+        ConProps = new();
+        ConFields = new();
+        Converters = new();
+        HiddenKeys = new();
 
         var types = _assembly.GetTypes().Concat(Assembly.GetExecutingAssembly().GetTypes());
         foreach (var type in types)
         {
             // Add Converters
-            foreach (var converterMethod in type.GetMethods(BindingFlags.NonPublic | 
-                                                            BindingFlags.Public | 
-                                                            BindingFlags.Instance | 
+            foreach (var converterMethod in type.GetMethods(BindingFlags.NonPublic |
+                                                            BindingFlags.Public |
+                                                            BindingFlags.Instance |
                                                             BindingFlags.Static))
             {
                 var attr = converterMethod.GetCustomAttribute<TypeConverterAttribute>();
                 if (attr is not null)
+                {
                     if (!Converters.ContainsKey(converterMethod.ReturnType))
                         Converters.Add(converterMethod.ReturnType, new List<MethodInfo>() { converterMethod });
                     else
                         Converters[converterMethod.ReturnType].Add(converterMethod);
+                }
             }
 
             foreach (var method in type.GetMethods(BindingFlags.Static |
@@ -57,6 +61,10 @@ public class CommandRegistry
                         Commands.Add(command.Trigger, new() { method });
                     else
                         Commands[command.Trigger].Add(method);
+
+                    var hidden = method.GetCustomAttribute<ConsoleHiddenAttribute>();
+                    if (hidden is not null)
+                        HiddenKeys.Add(command.Trigger);
                 }
             }
 
@@ -68,6 +76,10 @@ public class CommandRegistry
                 if (prop is not null)
                 {
                     ConProps.Add(prop.Name, property);
+
+                    var hidden = property.GetCustomAttribute<ConsoleHiddenAttribute>();
+                    if (hidden is not null)
+                        HiddenKeys.Add(prop.Name);
                 }
             }
 
@@ -79,16 +91,21 @@ public class CommandRegistry
                 if (fld is not null)
                 {
                     ConFields.Add(fld.Name, field);
+
+                    var hidden = field.GetCustomAttribute<ConsoleHiddenAttribute>();
+                    if (hidden is not null)
+                        HiddenKeys.Add(fld.Name);
                 }
             }
         }
 
         if (_helpCommand)
-            Commands.Add("help",
-                new()
-                {
-                    GetType().GetMethod(nameof(HelpCommand), BindingFlags.NonPublic | BindingFlags.Instance)
-                });
+        {
+            Commands.Add("help", new()
+            {
+                GetType().GetMethod(nameof(HelpCommand), BindingFlags.NonPublic | BindingFlags.Instance)
+            });
+        }
     }
 
     // TODO: This sucks so bad I hate it I hate it I hate it I hate it I hate it I hate it I hate it I hate it I ha
@@ -97,16 +114,16 @@ public class CommandRegistry
         var cmdHeader = "=== Commands ===";
         var varHeader = "=== ConVars ===";
         var typeHeader = "=== Declaring Type ===";
-        var firstColumn = new List<string>() { cmdHeader }.Concat(Commands.Where(kvp => kvp.Key != "help")
+        var firstColumn = new List<string>() { cmdHeader }.Concat(Commands.Where(kvp => kvp.Key != "help" && !HiddenKeys.Contains(kvp.Key))
                 .Select(c => $"{c.Key}({GetSignature(c.Value.OrderBy(m => m.GetParameters().Length).Last())})"))
             .Concat(new List<string>() { varHeader })
-            .Concat(ConFields.Select(c => c.Key))
-            .Concat(ConProps.Select(c => c.Key));
-        var secondColumn = new List<string>() { typeHeader }.Concat(Commands.Where(kvp => kvp.Key != "help")
+            .Concat(ConFields.Where(c => !HiddenKeys.Contains(c.Key)).Select(c => c.Key))
+            .Concat(ConProps.Where(c => !HiddenKeys.Contains(c.Key)).Select(c => c.Key));
+        var secondColumn = new List<string>() { typeHeader }.Concat(Commands.Where(kvp => kvp.Key != "help" && !HiddenKeys.Contains(kvp.Key))
                 .Select(c => $"| {c.Value.First().DeclaringType}"))
             .Concat(new List<string>() { typeHeader })
-            .Concat(ConFields.Select(c => c.Value.DeclaringType!.ToString()))
-            .Concat(ConProps.Select(c => c.Value.DeclaringType!.ToString()));
+            .Concat(ConFields.Where(c => !HiddenKeys.Contains(c.Key)).Select(c => c.Value.DeclaringType!.ToString()))
+            .Concat(ConProps.Where(c => !HiddenKeys.Contains(c.Key)).Select(c => c.Value.DeclaringType!.ToString()));
 
         var pad = firstColumn.OrderBy(s => s.Length).Last().Length;
 
@@ -138,6 +155,9 @@ public class CommandRegistry
         return args;
     }
 
+    public string? GetAutoComplete(int offset) =>
+        Commands.Keys.Concat(ConProps.Keys).Concat(ConFields.Keys).Where(s => !HiddenKeys.Contains(s)).ElementAtOrDefault(offset);
+
     internal string Call(string name, params object[] args)
     {
         try
@@ -148,21 +168,21 @@ public class CommandRegistry
                 if (toCall is null)
                     return "Not enough arguments.";
 
-                return toCall.Invoke(this, FillOptionals(args, toCall))?.ToString() ?? string.Empty;
+                return ObjToString(toCall.Invoke(this, FillOptionals(args, toCall))?.ToString() ?? string.Empty);
             }
             else if (ConProps.ContainsKey(name))
             {
                 if (args.Length != 0)
                     ConProps[name].SetValue(null, ConvertObjToType(args[0], ConProps[name].PropertyType));
 
-                return ToString(ConProps[name].GetValue(this));
+                return ObjToString(ConProps[name].GetValue(this));
             }
             else if (ConFields.ContainsKey(name))
             {
                 if (args.Length != 0)
                     ConFields[name].SetValue(null, ConvertObjToType(args[0], ConFields[name].FieldType));
 
-                return ToString(ConFields[name].GetValue(this));
+                return ObjToString(ConFields[name].GetValue(this));
             }
 
             return "This command was not recognized.";
@@ -179,17 +199,21 @@ public class CommandRegistry
         {
             if (type.IsEnum)
                 return obj is string s ? Enum.Parse(type, s) : Enum.ToObject(type, (int)obj);
-            
+
             return Converters[type].First().Invoke(obj, new[] { obj })!;
         }
         catch (TargetInvocationException e)
         {
-            throw new CommandParameterException($"\"{obj}\" is not parseable as required parameter type \"{type.Name}\"");
+            throw new CommandParameterException(
+                $"\"{obj}\" is not parseable as required parameter type \"{type.Name}\"");
         }
     }
 
-    private string ToString(object obj)
+    private string ObjToString(object? obj)
     {
+        if (obj is null)
+            return "null";
+
         if (Converters.First(kvp => kvp.Key == typeof(string)).Value
             .Any(m => m.GetParameters().First().ParameterType == obj.GetType()))
         {
