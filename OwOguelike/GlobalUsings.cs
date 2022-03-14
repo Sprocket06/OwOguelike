@@ -27,6 +27,7 @@ global using Chroma.Windowing;
 global using Chroma.Graphics.TextRendering.TrueType;
 global using Chroma.Diagnostics.Logging.Sinks;
 global using Chroma.MemoryManagement;
+global using Chroma.Diagnostics;
 
 global using System;
 global using System.Drawing;
@@ -34,6 +35,7 @@ global using System.Numerics;
 global using System.Text.Json;
 global using System.Text.Json.Nodes;
 global using System.Runtime.InteropServices;
+global using System.Reflection;
 
 global using Color = Chroma.Graphics.Color;
 global using Log = Chroma.Diagnostics.Logging.Log;

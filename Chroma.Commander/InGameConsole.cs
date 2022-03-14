@@ -215,7 +215,7 @@ public class InGameConsole : DisposableResource
     {
         var sb = new StringBuilder();
         var strings = new List<string>();
-            
+        
         PushString("> " + input);
             
         PushString(ProcessCommand(input));
