@@ -10,4 +10,9 @@ public class Level
         Entities = new();
         TileMap = new int[size.Width, size.Height];
     }
+
+    public override string ToString()
+    {
+        return base.ToString();
+    }
 }
