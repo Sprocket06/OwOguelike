@@ -25,7 +25,7 @@ public static class SceneManager
     }
 
     [ConsoleCommand("load_scene")]
-    public static void LoadSceneByName(string name)
+    public static void SetSceneByName(string name)
     {
         try
         {

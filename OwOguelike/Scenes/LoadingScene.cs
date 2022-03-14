@@ -12,13 +12,17 @@ public class LoadingScene : Scene
     private int _stuffDone;
     private float _fadeTimer = FADE_TIME;
 
-    private Scene? _sceneToLoad;
+    private readonly Scene? _sceneToLoad;
 
-    private Queue<Action> _actionQueue = new();
+    private readonly Queue<Action> _actionQueue = new();
 
-    public LoadingScene(Scene? postScene = null)
+    public LoadingScene(Scene? postScene)
     {
         _sceneToLoad = postScene;
+    }
+
+    public LoadingScene() : this(null)
+    {
     }
 
     public static void ShowLoadingScreen(Scene? postScene = null)
