@@ -2,7 +2,8 @@ namespace OwOguelike.Config;
 
 public class Configuration
 {
-    public static readonly string ConfigPath = "Config/config.json";
+    public const string ConfigPath = "Config/config.json";
+    public const string ProfilesPath = "Config/Profiles/";
 
     public static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -11,6 +12,7 @@ public class Configuration
     };
 
     private static Configuration _instance = null!;
+
     public static Configuration CurrentConfig
     {
         get => _instance;
@@ -21,9 +23,12 @@ public class Configuration
         }
     }
 
-    public Dictionary<string, Keymap> Profiles { get; set; } = new(); //{"keyboard", SheepleManager.DefaultProfile};
+    [JsonIgnore]
+    public Dictionary<string, ControlProfile> SavedProfiles { get; private set; } =
+        new() { { "keyboard", SheepleManager.DefaultProfile } };
+
     public VerticalSyncMode VSync { get; set; } = VerticalSyncMode.None;
-    public bool MuteAudioOutOfFocus { get; set; }= true;
+    public bool MuteAudioOutOfFocus { get; set; } = true;
     public float StickDeadzone = 0.2f;
 
     static Configuration()
@@ -41,6 +46,27 @@ public class Configuration
                 // Don't actually throw cause we can just nuke the config and call it a day :)
                 CurrentConfig = new Configuration();
             }
+
+            try
+            {
+                foreach (var file in Directory.EnumerateFiles(ProfilesPath, "*.json"))
+                {
+                    var key = Path.GetFileNameWithoutExtension(file);
+                    var val = JsonSerializer.Deserialize<ControlProfile>(File.ReadAllText(file), JsonOptions)!;
+                    if (CurrentConfig.SavedProfiles.ContainsKey(key))
+                        CurrentConfig.SavedProfiles[key] = val;
+                    else
+                        CurrentConfig.SavedProfiles.Add(key, val);
+                }
+            }
+            catch (IOException e)
+            {
+                GameCore.Log.Error("Could not read a profile file: " + e.Message);
+            }
+            catch (JsonException e)
+            {
+                GameCore.Log.Error("Could not deserialize a profile file: " + e.Message);
+            }
         }
         else
         {
@@ -53,6 +79,10 @@ public class Configuration
     {
         EnsureConfigCanBeSaved();
         File.WriteAllText(ConfigPath, JsonSerializer.Serialize(this, JsonOptions));
+        foreach (var kvp in this.SavedProfiles)
+        {
+            File.WriteAllText(Path.Join(ProfilesPath, kvp.Key + ".json"), JsonSerializer.Serialize(kvp.Value, JsonOptions));
+        }
     }
 
     [ConsoleCommand("syncconf")]
@@ -63,11 +93,13 @@ public class Configuration
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(ConfigPath)!);
+            Directory.CreateDirectory(ProfilesPath);
         }
         catch (IOException e)
         {
             GameCore.Log.Error(e);
-            throw new ConfigSaveException($"Config cannot be saved in this location: {Path.GetFullPath(ConfigPath)}", e);
+            throw new ConfigSaveException($"Config cannot be saved in this location: {Path.GetFullPath(ConfigPath)}",
+                e);
         }
     }
 }

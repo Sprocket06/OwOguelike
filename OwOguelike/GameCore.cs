@@ -103,9 +103,9 @@ public class GameCore : Game
         else
         {
             var p = SheepleManager.GetPlayer(inputId);
-            if (p.Keymap.IsBound(e.Button))
+            if (p.Profile.IsBound(e.Button))
             {
-                var c = p.Keymap.GetBind(e.Button);
+                var c = p.Profile.GetBind(e.Button);
                 SceneManager.ActiveScene?.ButtonControlPressed(new("keyboard", c));
             }
         }
@@ -128,9 +128,9 @@ public class GameCore : Game
         else
         {
             var p = SheepleManager.GetPlayer(inputId);
-            if (p.Keymap.IsBound(e.Button))
+            if (p.Profile.IsBound(e.Button))
             {
-                var c = p.Keymap.GetBind(e.Button);
+                var c = p.Profile.GetBind(e.Button);
                 SceneManager.ActiveScene?.ButtonControlReleased(new("keyboard", c));
             }
         }
@@ -166,9 +166,9 @@ public class GameCore : Game
         else
         {
             var p = SheepleManager.GetPlayer("keyboard");
-            if (p.Keymap.IsBound(e.KeyCode))
+            if (p.Profile.IsBound(e.KeyCode))
             {
-                var c = p.Keymap.GetBind(e.KeyCode);
+                var c = p.Profile.GetBind(e.KeyCode);
                 SceneManager.ActiveScene?.ButtonControlPressed(new("keyboard", c));
             }
         }
@@ -197,9 +197,9 @@ public class GameCore : Game
         else
         {
             var p = SheepleManager.GetPlayer("keyboard");
-            if (p.Keymap.IsBound(e.KeyCode))
+            if (p.Profile.IsBound(e.KeyCode))
             {
-                var c = p.Keymap.GetBind(e.KeyCode);
+                var c = p.Profile.GetBind(e.KeyCode);
                 SceneManager.ActiveScene?.ButtonControlReleased(new("keyboard", c));
             }
         }
@@ -238,9 +238,9 @@ public class GameCore : Game
         else
         {
             var p = SheepleManager.GetPlayer(inputId);
-            if (p.Keymap.IsBound(e.Button))
+            if (p.Profile.IsBound(e.Button))
             {
-                var c = p.Keymap.GetBind(e.Button);
+                var c = p.Profile.GetBind(e.Button);
                 SceneManager.ActiveScene?.ButtonControlPressed(new(inputId, c));
             }
         }
@@ -263,9 +263,9 @@ public class GameCore : Game
         else
         {
             var p = SheepleManager.GetPlayer(inputId);
-            if (p.Keymap.IsBound(e.Button))
+            if (p.Profile.IsBound(e.Button))
             {
-                var c = p.Keymap.GetBind(e.Button);
+                var c = p.Profile.GetBind(e.Button);
                 SceneManager.ActiveScene?.ButtonControlReleased(new(inputId, c));
             }
         }
@@ -290,9 +290,9 @@ public class GameCore : Game
             else
             {
                 var p = SheepleManager.GetPlayer(inputId);
-                if (p.Keymap.IsBound(e.Axis))
+                if (p.Profile.IsBound(e.Axis))
                 {
-                    var c = p.Keymap.GetBind(e.Axis);
+                    var c = p.Profile.GetBind(e.Axis);
                     SceneManager.ActiveScene?.AxisControlMoved(new(inputId, c, e.Value));
                 }
             }
