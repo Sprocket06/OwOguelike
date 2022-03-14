@@ -3,6 +3,7 @@ namespace OwOguelike.Scenes;
 public class GameplayScene : Scene
 {
     public Level CurrentLevel;
+    public Camera GameCam;
 
     public override void LoadStep()
     {
@@ -13,6 +14,10 @@ public class GameplayScene : Scene
     public GameplayScene()
     {
         CurrentLevel = new(new Size(100, 100));
+        GameCam = new Camera(0, 0, 1) // TODO: Figure out how Z axis works with camera (Not even sure cookie knows)
+        {
+            UseCenteredOrigin = true
+        };
     }
 
     public override void Update(float delta)
@@ -56,24 +61,29 @@ public class GameplayScene : Scene
 
     public override void Draw(RenderContext context)
     {
+        // Render world
+        context.WithCamera(GameCam, () =>
+        {
+            for (var x = 0; x < CurrentLevel.TileMap.GetUpperBound(0); x++)
+            {
+                for (var y = 0; y < CurrentLevel.TileMap.GetUpperBound(1); y++)
+                {
+                    // TODO: Will just crash until we actually have tiles to draw
+                    //DrawTile(context, x, y, CurrentLevel.TileMap[x,y]);
+                }
+            }
+
+            foreach (var e in CurrentLevel.Entities)
+            {
+                if (e is IDrawable)
+                {
+                    context.Rectangle(ShapeMode.Fill, e.Position, 10, 10, Color.Aqua);
+                }
+            }
+        });
+        
+        // UI / Overlay
         context.DrawString("Press Enter or Start to join.", new(0, 0), Color.White);
-
-        for (var x = 0; x < CurrentLevel.TileMap.GetUpperBound(0); x++)
-        {
-            for (var y = 0; y < CurrentLevel.TileMap.GetUpperBound(1); y++)
-            {
-                // TODO: Will just crash until we actually have tiles to draw
-                //DrawTile(context, x, y, CurrentLevel.TileMap[x,y]);
-            }
-        }
-
-        foreach (var e in CurrentLevel.Entities)
-        {
-            if (e is IDrawable)
-            {
-                context.Rectangle(ShapeMode.Fill, e.Position, 10, 10, Color.Aqua);
-            }
-        }
     }
 
     private void DrawTile(RenderContext context, int x, int y, int type)
