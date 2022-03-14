@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chroma.Commander", "Chroma.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwOguelike.UI", "OwOguelike.UI\OwOguelike.UI.csproj", "{0DEDABDD-94DB-4161-94FB-223A2636B16A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwOguelike.UI.Tests", "OwOguelike.UI.Tests\OwOguelike.UI.Tests.csproj", "{9101AD6C-3594-459E-AD15-874B251E768B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{0DEDABDD-94DB-4161-94FB-223A2636B16A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DEDABDD-94DB-4161-94FB-223A2636B16A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DEDABDD-94DB-4161-94FB-223A2636B16A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9101AD6C-3594-459E-AD15-874B251E768B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9101AD6C-3594-459E-AD15-874B251E768B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9101AD6C-3594-459E-AD15-874B251E768B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9101AD6C-3594-459E-AD15-874B251E768B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
