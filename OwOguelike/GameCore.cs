@@ -68,7 +68,7 @@ public class GameCore : Game
 
             if (DebugVars.ShowFPS >= 3)
             {
-                //debugInfo.Add(SceneManager.ActiveScene?.GetType().Name ?? "No Loaded Level");
+                debugInfo.Add(LevelManager.ActiveLevel?.GetType().Name ?? "No Loaded Level");
             }
 
             var y = 4;
@@ -292,7 +292,7 @@ public class GameCore : Game
                 var p = SheepleManager.GetPlayer(inputId);
                 if (p.Keymap.IsBound(e.Axis))
                 {
-                    ControlAxis c = p.Keymap.GetBind(e.Axis);
+                    var c = p.Keymap.GetBind(e.Axis);
                     SceneManager.ActiveScene?.AxisControlMoved(new(inputId, c, e.Value));
                 }
             }
