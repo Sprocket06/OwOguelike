@@ -32,6 +32,7 @@ public class GameCore : Game
     }
     
     [ConsoleCommand("test")]
+    [ConsoleHidden]
     public static string TestDebug(int test = 1, string test2 = "gaming")
     {
         return test.ToString() + test2;

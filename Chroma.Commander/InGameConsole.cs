@@ -42,7 +42,7 @@ public class InGameConsole : DisposableResource
 
     public float SlidingSpeed { get; set; } = 2000;
 
-    public InGameConsole(Window window, int maxLines = 20, Assembly? assembly = null, string? motd = null)
+    public InGameConsole(Window window, int maxLines = 20, Assembly? assembly = null, string? motd = null, int historySize = 20)
     {
         _window = window;
         _maxLines = maxLines;
@@ -59,7 +59,8 @@ public class InGameConsole : DisposableResource
             new(0, maxLines * _ttf.Height + 4),
             _ttf, 
             _target.Width / 8,
-            HandleUserInput
+            HandleUserInput,
+            historySize
         );
         _registry = new CommandRegistry(assembly ?? Assembly.GetCallingAssembly());
         if (motd is not null)
@@ -69,7 +70,7 @@ public class InGameConsole : DisposableResource
             PushString(Motd);
     }
 
-    public void RefreshConVars()
+    public void RefreshItems()
     {
         _registry.RefreshItems();
     }
