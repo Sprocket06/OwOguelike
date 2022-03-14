@@ -11,6 +11,8 @@ namespace Chroma.Commander;
 internal class InputLine
 {
     internal Vector2 Position;
+
+    private ICommandRegistry _registry;
     private TrueTypeFont _ttf;
     private Action<string> _inputHandler;
 
@@ -28,11 +30,13 @@ internal class InputLine
     
     private Stack<string> _historyBuffer;
     private int _historyPointer;
+    private int _autocompletePointer;
     private string _previousInput = string.Empty;
 
-    public InputLine(Vector2 position, TrueTypeFont ttf, int maxCols, Action<string> inputHandler, int historySize)
+    public InputLine(ICommandRegistry registry, Vector2 position, TrueTypeFont ttf, int maxCols, Action<string> inputHandler, int historySize)
     {
         Position = position;
+        _registry = registry;
         _ttf = ttf;
 
         _inputHandler = inputHandler;
@@ -148,6 +152,23 @@ internal class InputLine
                 }
                 break;
             }
+            
+            case KeyCode.Tab:
+                var next = _autocompletePointer + ((e.Modifiers & KeyModifiers.Shift) != 0 ? -1 : 1);
+                if(next < 0)
+                {
+                    _autocompletePointer = -1;
+                    SetInput(string.Empty);
+                    return;
+                }
+
+                var fill = _registry.GetAutoComplete(_previousInput, next);
+                if (fill is null)
+                    return;
+
+                _autocompletePointer = next;
+                SetInput(fill);
+                break;
                 
             case KeyCode.Left:
             {
@@ -237,6 +258,7 @@ internal class InputLine
     private void ResetHistory(bool force = false)
     {
         _historyPointer = -1;
+        _autocompletePointer = -1;
         if(force || !string.IsNullOrWhiteSpace(_input))
             _previousInput = _input;
     }
