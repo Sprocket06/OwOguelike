@@ -3,16 +3,16 @@
 public class Player
 {
     public int PlayerNum { get; set; }
-    public Keymap Keymap { get; set; }
+    public ControlProfile Profile { get; set; }
     public string InputID { get; set; }
 
     public ControlState ControlState { get; set; } = new();
     public Entity? Puppet { get; set; }
 
-    public Player(int index, Keymap map, string inputId)
+    public Player(int index, ControlProfile map, string inputId)
     {
         PlayerNum = index;
-        Keymap = map;
+        Profile = map;
         InputID = inputId;
     }
 
