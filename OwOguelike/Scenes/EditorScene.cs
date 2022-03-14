@@ -15,6 +15,16 @@ public class EditorScene : Scene
         
     }
 
+    public override void Draw(RenderContext context)
+    {
+        base.Draw(context);
+    }
+
+    private void DrawToolbar()
+    {
+        
+    }
+
     [ConsoleCommand("editor")]
     public static void LoadEditor() => SceneManager.SetActiveScene<EditorScene>();
 }

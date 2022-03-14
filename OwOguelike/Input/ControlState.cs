@@ -26,18 +26,22 @@ public class ControlState
     public void SetAxis(ControlAxis axis, short value) => Axes[axis] = value;
 
     public short GetRawAxis(ControlAxis axis) => Axes[axis];
+    
+    public float GetRawNormalizedAxis(ControlAxis axis) => Axes[axis] != 0 ? (float)Axes[axis] / short.MaxValue : 0;
 
     public short GetAxis(ControlAxis axis)
     {
         var val = GetRawAxis(axis);
         return Math.Abs((float)val) / short.MaxValue < Configuration.CurrentConfig.StickDeadzone ? (short)0 : val;
     }
+    
+    public float GetNormalizedAxis(ControlAxis axis)
+    {
+        var val = GetRawAxis(axis);
+        return val != 0 ? (float)val / short.MaxValue : 0;
+    }
 
-    private Vector2 JoinAxes(short x, short y) =>
-        new(x != 0 ? (float)x / short.MaxValue : 0,
-            y != 0 ? (float)y / short.MaxValue : 0);
+    public Vector2 AssembleRawVector(ControlAxis x, ControlAxis y) => new(GetRawNormalizedAxis(x), GetRawNormalizedAxis(y));
 
-    public Vector2 AssembleRawVector(ControlAxis x, ControlAxis y) => JoinAxes(GetRawAxis(x), GetRawAxis(y));
-
-    public Vector2 AssembleVector(ControlAxis x, ControlAxis y) => JoinAxes(GetAxis(x), GetAxis(y));
+    public Vector2 AssembleVector(ControlAxis x, ControlAxis y) => new(GetNormalizedAxis(x), GetNormalizedAxis(y));
 }
