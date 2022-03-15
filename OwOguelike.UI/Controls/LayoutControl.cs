@@ -1,6 +1,6 @@
 namespace OwOguelike.UI;
 
-public class LayoutControl : Control
+public abstract class LayoutControl : Control
 {
     public Rectangle Margins;
 
