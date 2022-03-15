@@ -24,6 +24,6 @@ public class Actor : Entity, IDrawable, ICollidable, IMovable
 
     public void Draw(RenderContext context)
     {
-        throw new NotImplementedException();
+        context.Rectangle(ShapeMode.Fill, this.Position, 20, 20, Color.Aqua);
     }
 }

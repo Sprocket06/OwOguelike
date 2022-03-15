@@ -75,9 +75,9 @@ public class GameplayScene : Scene
 
             foreach (var e in CurrentLevel.Entities)
             {
-                if (e is IDrawable)
+                if (e is IDrawable drawable)
                 {
-                    context.Rectangle(ShapeMode.Fill, e.Position, 10, 10, Color.Aqua);
+                    drawable.Draw(context);
                 }
             }
         });
