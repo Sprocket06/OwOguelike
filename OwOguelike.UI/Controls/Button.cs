@@ -14,7 +14,7 @@ public class Button : TextControl
 
     public override void Draw(RenderContext context)
     {
-        context.DrawString(Text, Vector2.Zero, Color.White);
+        context.DrawString(Font, Text, Vector2.Zero, Color.White);
         RenderSettings.LineThickness = 2;
         context.Rectangle(ShapeMode.Stroke, Vector2.Zero, Size, Color.Red);
         base.Draw(context);

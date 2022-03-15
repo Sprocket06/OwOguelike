@@ -1,8 +1,6 @@
-using Chroma.Graphics.TextRendering.TrueType;
-
 namespace OwOguelike.UI;
 
-public class TextControl : Control
+public abstract class TextControl : Control
 {
     private IFontProvider? _font;
 

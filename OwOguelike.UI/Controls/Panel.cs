@@ -1,6 +1,6 @@
 namespace OwOguelike.UI;
 
-public class Panel : LayoutControl
+public class Panel : Frame
 {
     public Panel(int x = 0, int y = 0, int w = 0, int h = 0, Rectangle? margins = null) : base(x, y, w, h, margins)
     {
@@ -21,13 +21,6 @@ public class Panel : LayoutControl
     public override void Draw(RenderContext context)
     {
         context.Rectangle(ShapeMode.Fill, X, Y, Width, Height, Color.Gray);
-        RenderSettings.Scissor = new(
-            X + Margins.Left,
-            Y + Margins.Top,
-            Width - Margins.Right - Margins.Left,
-            Height - Margins.Bottom - Margins.Top
-        );
         base.Draw(context);
-        RenderSettings.Scissor = Rectangle.Empty;
     }
 }

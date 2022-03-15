@@ -89,6 +89,18 @@ public abstract class Control
             Height = value.Height;
         }
     }
+
+    private Vector2 _scale = Vector2.One;
+
+    public Vector2 Scale
+    {
+        get => _scale;
+        set
+        {
+            _scale = value;
+            InvalidateLayout();
+        }
+    }
     
     public bool ValidationEnabled { get; set; }
 
@@ -140,26 +152,45 @@ public abstract class Control
     public virtual void Draw(RenderContext context)
     {
         RenderTransform.Translate(Position);
+        RenderTransform.Scale(Scale);
         foreach (var control in _children)
         {
             control.Draw(context);
         }
+        RenderTransform.Scale(-Scale);
         RenderTransform.Translate(-Position);
     }
 
-    public virtual void MouseButtonPressed(MouseButtonEventArgs e)
+    public virtual bool MouseButtonPressed(MouseButtonEventArgs e)
     {
         foreach (var control in _children)
         {
-            control.MouseButtonPressed(e);
+            if (control.MouseButtonPressed(e))
+                return true;
         }
+
+        return false;
     }
 
-    public virtual void MouseButtonReleased(MouseButtonEventArgs e)
+    public virtual bool MouseButtonReleased(MouseButtonEventArgs e)
     {
         foreach (var control in _children)
         {
-            control.MouseButtonReleased(e);
+            if (control.MouseButtonReleased(e))
+                return true;
         }
+
+        return false;
+    }
+
+    public virtual bool MouseMoved(MouseMoveEventArgs e)
+    {
+        foreach (var control in _children)
+        {
+            if (control.MouseMoved(e))
+                return true;
+        }
+
+        return false;
     }
 }

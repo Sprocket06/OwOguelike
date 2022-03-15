@@ -3,16 +3,16 @@
 public class Player
 {
     public int PlayerNum { get; set; }
-    public Keymap Keymap { get; set; }
+    public ControlProfile Profile { get; set; }
     public string InputID { get; set; }
 
     public ControlState ControlState { get; set; } = new();
     public Entity? Puppet { get; set; }
 
-    public Player(int index, Keymap map, string inputId)
+    public Player(int index, ControlProfile map, string inputId)
     {
         PlayerNum = index;
-        Keymap = map;
+        Profile = map;
         InputID = inputId;
     }
 
@@ -28,7 +28,7 @@ public class Player
     public short GetAxis(ControlAxis axis)
     {
         var val = GetRawAxis(axis);
-        return Math.Abs((float)val) / short.MaxValue < Configuration.CurrentConfig.StickDeadzone ? (short)0 : val;
+        return Math.Abs((float)val) / short.MaxValue < Profile.ControllerDeadzone ? (short)0 : val;
     }
 
     public float GetNormalizedAxis(ControlAxis axis)
