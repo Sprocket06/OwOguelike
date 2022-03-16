@@ -1,0 +1,4 @@
+[submodule "Bulge"]
+	path = Bulge
+	url = https://github.com/Sprocket06/Bulge
+	branch = master
