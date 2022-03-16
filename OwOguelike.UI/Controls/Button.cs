@@ -1,15 +1,13 @@
-namespace OwOguelike.UI;
+namespace OwOguelike.UI.Controls;
 
-public class Button : TextControl
+public class Button : TextControl, IClickable
 {
-    public delegate bool ButtonDelegate(object sender);
+    public event IClickable.ClickEventHandler? Click;
 
-    public ButtonDelegate OnPress { get; set; }
-
-    public Button(string text = "Button", ButtonDelegate? action = null)
+    public Button(string text = "Button", IClickable.ClickEventHandler? action = null)
     {
         Text = text;
-        OnPress = action ?? (_ => false);
+        Click += action ?? ((_, _) => false);
     }
 
     public override void Draw(RenderContext context)
@@ -18,5 +16,10 @@ public class Button : TextControl
         RenderSettings.LineThickness = 2;
         context.Rectangle(ShapeMode.Stroke, Vector2.Zero, Size, Color.Red);
         base.Draw(context);
+    }
+
+    public bool OnReleased(MouseButtonEventArgs e)
+    {
+        return Click?.Invoke(this, e) ?? false;
     }
 }

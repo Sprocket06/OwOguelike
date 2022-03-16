@@ -1,4 +1,4 @@
-﻿namespace OwOguelike.UI;
+﻿namespace OwOguelike.UI.Controls;
 
 public abstract class Control
 {
@@ -9,6 +9,8 @@ public abstract class Control
     public ImmutableList<Control> Children => _children.ToImmutableList();
     
     public Control? Parent { get; private set; }
+
+    private bool _hoveredOver;
 
     private int _x;
     public int X
@@ -90,6 +92,8 @@ public abstract class Control
         }
     }
 
+    public Rectangle Bounds => new(X, Y, Width, Height);
+
     private Vector2 _scale = Vector2.One;
 
     public Vector2 Scale
@@ -118,10 +122,6 @@ public abstract class Control
     }
 
     public Control(Vector2 pos, int w = 0, int h = 0) : this((int)pos.X, (int)pos.Y, w, h)
-    {
-    }
-
-    public Control(int x, int y, Size size) : this(x, y, size.Width, size.Height)
     {
     }
 
@@ -163,6 +163,15 @@ public abstract class Control
 
     public virtual bool MouseButtonPressed(MouseButtonEventArgs e)
     {
+        if (this is IClickable i)
+        {
+            if (Bounds.Contains(e.Position))
+            {
+                if (i.OnPressed(e)) 
+                    return true;
+            }
+        }
+        
         foreach (var control in _children)
         {
             if (control.MouseButtonPressed(e))
@@ -174,6 +183,15 @@ public abstract class Control
 
     public virtual bool MouseButtonReleased(MouseButtonEventArgs e)
     {
+        if (this is IClickable i)
+        {
+            if (Bounds.Contains(e.Position))
+            {
+                if (i.OnReleased(e)) 
+                    return true;
+            }
+        }
+        
         foreach (var control in _children)
         {
             if (control.MouseButtonReleased(e))
@@ -185,6 +203,25 @@ public abstract class Control
 
     public virtual bool MouseMoved(MouseMoveEventArgs e)
     {
+        if (this is IInteractable i)
+        {
+            if (Bounds.Contains(e.Position))
+            {
+                if (!_hoveredOver)
+                    if (i.OnHoverEnter(e))
+                        return true;
+            
+                _hoveredOver = true;
+            }
+            else
+            {
+                if (i.OnHoverExit(e))
+                    return true;
+                
+                _hoveredOver = false;
+            }
+        }
+        
         foreach (var control in _children)
         {
             if (control.MouseMoved(e))

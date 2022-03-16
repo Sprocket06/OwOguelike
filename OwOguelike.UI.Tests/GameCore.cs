@@ -3,6 +3,7 @@ using System.Numerics;
 using Chroma;
 using Chroma.Diagnostics;
 using Chroma.Graphics;
+using OwOguelike.UI.Controls;
 using Color = Chroma.Graphics.Color;
 
 namespace OwOguelike.UI.Tests;
@@ -15,8 +16,14 @@ public class GameCore : Game
     {
         Graphics.VerticalSyncMode = VerticalSyncMode.None;
         Graphics.LimitFramerate = false;
-        
-        _panel = new Panel(100, 100, 100, 100, Rectangle.FromLTRB(4, 4, 4, 4));
+
+        _panel = new Panel(150, 150, 100, 100)
+        {
+            Margins = Rectangle.FromLTRB(4, 4, 4, 4),
+            Color = Color.Pink,
+            Radius = 25,
+            Border = new(Color.Chocolate, 8, 25)
+        };
         _panel.AddChild(new Button("owjdnufnwqnfwnfpqwfnwqpofnqwpofqwnfpoquiwfuwoqfhuwhfuwqhfuwqf"));
         FixedTimeStepTarget = 1;
     }
@@ -26,6 +33,7 @@ public class GameCore : Game
         context.Clear(Color.Green);
         _panel.Draw(context);
         context.DrawString("test", Vector2.Zero, Color.Red);
+        context.RoundedRect(ShapeMode.Fill, 10, 10, 200, 100, 25, Color.Red);
     }
 
     protected override void FixedUpdate(float delta)

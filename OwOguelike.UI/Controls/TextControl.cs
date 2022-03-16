@@ -1,4 +1,4 @@
-namespace OwOguelike.UI;
+namespace OwOguelike.UI.Controls;
 
 public abstract class TextControl : Control
 {
@@ -14,7 +14,7 @@ public abstract class TextControl : Control
         }
     }
 
-    private string _text;
+    private string _text = null!;
 
     public string Text
     {
@@ -35,10 +35,6 @@ public abstract class TextControl : Control
     }
 
     public TextControl(Vector2 pos, int w = 0, int h = 0) : base(pos, w, h)
-    {
-    }
-
-    public TextControl(int x, int y, Size size) : base(x, y, size)
     {
     }
 

@@ -1,20 +1,16 @@
-namespace OwOguelike.UI;
+namespace OwOguelike.UI.Controls;
 
 public class Frame : LayoutControl
 {
-    public Frame(int x = 0, int y = 0, int w = 0, int h = 0, Rectangle? margins = null) : base(x, y, w, h, margins)
+    public Frame(int x = 0, int y = 0, int w = 0, int h = 0) : base(x, y, w, h)
     {
     }
 
-    public Frame(Vector2 pos, Size size, Rectangle? margins = null) : base(pos, size, margins)
+    public Frame(Vector2 pos, Size size) : base(pos, size)
     {
     }
 
-    public Frame(Vector2 pos, int w = 0, int h = 0, Rectangle? margins = null) : base(pos, w, h, margins)
-    {
-    }
-
-    public Frame(int x, int y, Size size, Rectangle? margins = null) : base(x, y, size, margins)
+    public Frame(Vector2 pos, int w = 0, int h = 0) : base(pos, w, h)
     {
     }
 
