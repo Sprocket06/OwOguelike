@@ -24,12 +24,12 @@ public class Configuration
     }
 
     [JsonInclude]
-    public Dictionary<string, string> ProfileMap { get; private set; }
+    public Dictionary<string, string> ProfileMap { get; private set; } = null!;
 
     public string DefaultProfile { get; set; } = "Default";
 
     [JsonIgnore]
-    public Dictionary<string, ControlProfile> SavedProfiles { get; private set; }
+    public Dictionary<string, ControlProfile> SavedProfiles { get; private set; } = null!;
 
     public VerticalSyncMode VSync { get; set; } = VerticalSyncMode.None;
     public bool MuteAudioOutOfFocus { get; set; } = true;
