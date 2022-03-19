@@ -62,7 +62,7 @@ public class GameCore : Game
             
             if (DebugVars.ShowFPS >= 2)
             {
-                debugInfo[0] += $" {PerformanceCounter.Delta.ToString("0.00")}ms";
+                debugInfo[0] += $" {PerformanceCounter.Delta:0.00}ms";
                 debugInfo.Add(SceneManager.ActiveScene?.GetType().Name ?? "No Loaded Scene");
             }
 
