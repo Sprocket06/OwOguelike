@@ -31,7 +31,7 @@ public class SheepleManager
         return p;
     }
 
-    [ConsoleCommand("get_binds")]
+    [ConVar("get_binds")]
     public static ControlProfile GetBinds(int playerNum = 0)
     {
         if (Players.Exists(p => p.PlayerNum == playerNum))

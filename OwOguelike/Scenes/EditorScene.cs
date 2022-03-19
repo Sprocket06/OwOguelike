@@ -25,6 +25,6 @@ public class EditorScene : Scene
         
     }
 
-    [ConsoleCommand("editor")]
+    [ConVar("editor")]
     public static void LoadEditor() => SceneManager.SetActiveScene<EditorScene>();
 }

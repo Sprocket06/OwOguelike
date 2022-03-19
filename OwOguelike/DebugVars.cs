@@ -6,9 +6,9 @@ public class DebugVars
     // 1 = Show FPS
     // 2 = Show Scene
     // 3 = Show Level
-    [ConsoleVariable("cl_showfps")]
+    [ConVar("cl_showfps")]
     public static int ShowFPS = 0;
     
-    [ConsoleVariable("sv_cheats")] 
+    [ConVar("sv_cheats")] 
     private static bool Cheats = false;
 }

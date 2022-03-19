@@ -36,7 +36,7 @@ public static partial class Sfx
             LoadClip(_builtinClips[clip]);
     }
 
-    [ConsoleCommand("stopsounds")]
+    [ConVar("stopsounds")]
     public static void StopAllSounds()
     {
         foreach (var sound in LoadedClips.Values)
@@ -58,13 +58,13 @@ public static partial class Sfx
         return sound;
     }
 
-    [ConsoleCommand("playsound")]
+    [ConVar("playsound", "Play an arbitrary sound.")]
     public static Sound PlayClip(string path) => PlayClip(LoadClip(path));
 
     public static Sound PlayClip(string path, Vector2 sourcePosition, Vector2 listenerPosition) 
         => PlayClip(LoadClip(path), sourcePosition, listenerPosition);
 
-    [ConsoleCommand("soundtest")]
+    [ConVar("soundtest", "Play a builtin game sound.")]
     public static Sound? PlayClip(AudioClip clip)
     {
         if (_builtinClips.ContainsKey(clip))

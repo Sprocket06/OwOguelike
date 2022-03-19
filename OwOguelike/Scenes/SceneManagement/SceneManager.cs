@@ -24,7 +24,7 @@ public static class SceneManager
         ActiveScene = scene;
     }
 
-    [ConsoleCommand("load_scene")]
+    [ConVar("load_scene")]
     public static void SetSceneByName(string name)
     {
         try

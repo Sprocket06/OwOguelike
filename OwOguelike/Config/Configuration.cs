@@ -100,7 +100,7 @@ public class Configuration
         }
     }
 
-    [ConsoleCommand("syncconf")]
+    [ConVar("syncconf")]
     public static void Sync() => _instance.Save();
 
     private static void EnsureConfigCanBeSaved()

@@ -31,7 +31,7 @@ public class GameCore : Game
         LoadingScene.ShowLoadingScreen<GameplayScene>();
     }
     
-    [ConsoleCommand("test")]
+    [ConVar("test")]
     [ConsoleHidden]
     public static string TestDebug(int test = 1, string test2 = "gaming")
     {

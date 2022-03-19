@@ -2,3 +2,7 @@
 	path = Bulge
 	url = https://github.com/Sprocket06/Bulge
 	branch = master
+[submodule "Chroma.Commander"]
+	path = Chroma.Commander
+	url = https://github.com/Enovale/Chroma.Commander.git
+	branch = master
