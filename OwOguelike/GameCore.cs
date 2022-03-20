@@ -10,6 +10,7 @@ public class GameCore : Game
     public static ScanCode ConsoleKey { get; } = ScanCode.Grave;
     
     private readonly InGameConsole _console;
+    private TrueTypeFont _debugFont;
     
     public GameCore() : base(new(false, false))
     {
@@ -21,14 +22,13 @@ public class GameCore : Game
         var assembly = Assembly.GetExecutingAssembly();
         var motd = string.Empty;
         
-        var motdResource = assembly.GetManifestResourceStream($"{nameof(OwOguelike)}.Content.motd.txt");
+        var motdResource = assembly.GetManifestResourceStream($"{nameof(OwOguelike)}.Content.Embedded.motd.txt");
         if (motdResource is not null)
             using (var reader = new StreamReader(motdResource))
                 motd = reader.ReadToEnd();
 
         _console = new InGameConsole(Window, 20, null, motd);
         Log.SinkTo(new CommanderSink(_console));
-        LoadingScene.ShowLoadingScreen<GameplayScene>();
     }
     
     [ConVar("test")]
@@ -41,6 +41,11 @@ public class GameCore : Game
     protected override void LoadContent()
     {
         ContentProvider = Content;
+        _debugFont = ContentProvider.Load<TrueTypeFont>("Fonts/JetBrainsMono-Regular.ttf");
+        // Dont play unless you want noise lol
+        //var song = ContentProvider.Load<Music>("Audio/Music/FUSE/To the Moon.wav");
+        //song.Play();
+        LoadingScene.ShowLoadingScreen<GameplayScene>();
     }
 
     protected override void Update(float delta)
@@ -74,8 +79,8 @@ public class GameCore : Game
             var y = 4;
             for (var i = 0; i < debugInfo.Count; i++)
             {
-                var measure = TrueTypeFont.Default.Measure(debugInfo[i]);
-                context.DrawString(debugInfo[i], Window.Width - measure.Width - 4, y, Color.White);
+                var measure = _debugFont.Measure(debugInfo[i]);
+                context.DrawString(_debugFont, debugInfo[i], Window.Width - measure.Width - 4, y, Color.White);
                 y += measure.Height + 4;
             }
         }

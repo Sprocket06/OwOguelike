@@ -20,17 +20,11 @@
         <None Update="cute_c2.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="Content\Fonts\NewHiScore.ttf">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Folder Include="Content/" />
+        <EmbeddedResource Include="Content/Embedded/**" />
+        <None Include="Content/**" Exclude="Content/Embedded/**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Include="Content\Textures\TileMap.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Remove="Content\motd.txt" />
-        <EmbeddedResource Include="Content\motd.txt" />
     </ItemGroup>
 
 </Project>
