@@ -1,6 +1,6 @@
 ﻿namespace OwOguelike.Interfaces;
 
-public interface IRobot
+public interface IRobot : IUpdating
 {
     //TODO
 }

@@ -77,11 +77,11 @@ public class GameCore : Game
             }
 
             var y = 4;
-            for (var i = 0; i < debugInfo.Count; i++)
+            foreach (var t in debugInfo)
             {
-                var measure = _debugFont.Measure(debugInfo[i]);
-                context.DrawString(_debugFont, debugInfo[i], Window.Width - measure.Width - 4, y, Color.White);
-                y += measure.Height + 4;
+                var measure = _debugFont.Measure(t);
+                context.DrawString(_debugFont, t, Window.Width - measure.Width - 4, y, Color.White);
+                y += measure.Height;
             }
         }
     }

@@ -30,4 +30,21 @@ public abstract class Entity
             }
         }
     }
+    
+    public T? GetClosestOfType<T>() where T : Entity
+    {
+        Entity? tMin = null;
+        var minDist = float.MaxValue;
+        foreach (var e in LevelManager.ActiveLevel.Entities.Where(e => e is T))
+        {
+            var dist = Vector2.Distance(e.Position, Position);
+            if (dist < minDist)
+            {
+                tMin = e;
+                minDist = dist;
+            }
+        }
+        
+        return tMin as T;
+    }
 }

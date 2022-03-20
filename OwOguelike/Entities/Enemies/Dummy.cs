@@ -1,28 +1,23 @@
 namespace OwOguelike.Entities;
 
-public class Actor : Entity, IDrawable, ICollidable, IMovable
+public class Dummy : Entity, IDrawable, IMovable
 {
-
     public DrawLayer Layer { get; set; } = DrawLayer.Characters;
     
-    /* Current Movement Physics:
-     * Max Vel: 200px/sec
-     * Accel: 2000px/sec
-     * 0-Max Speed in: 0.1 sec
-     * Decel same as Accel
-     */
     public float MovementAcceleration { get; set; } = 2000f;
     public float MovementDeceleration { get; set; } = 2000f;
     public Vector2 Velocity { get; set; } = new(0,0);
     public float Acceleration { get; set; } = 0;
     
-    
     public void Update(float delta)
     {
+        var closest = GetClosestOfType<Actor>();
+        if (closest is not null)
+            Position += Vector2.Normalize(closest.Position - Position) * 50 * delta;
     }
 
     public void Draw(RenderContext context)
     {
-        context.Rectangle(ShapeMode.Fill, this.Position, 20, 20, Color.Aqua);
+        context.Rectangle(ShapeMode.Fill, Position, 20, 20, Color.Green);
     }
 }

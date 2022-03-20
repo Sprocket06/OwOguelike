@@ -2,7 +2,7 @@ namespace OwOguelike.Scenes;
 
 public class GameplayScene : Scene
 {
-    public Level CurrentLevel;
+    public Level? CurrentLevel => LevelManager.ActiveLevel;
     public Camera GameCam;
 
     public override void LoadStep()
@@ -13,7 +13,8 @@ public class GameplayScene : Scene
 
     public GameplayScene()
     {
-        CurrentLevel = new(new Size(100, 100));
+        LevelManager.LoadLevel(new(new Size(100, 100)));
+        LevelManager.SpawnEntity<Dummy>(new(500, 500));
         GameCam = new Camera(0, 0, 1) // TODO: Figure out how Z axis works with camera (Not even sure cookie knows)
         {
             UseCenteredOrigin = true
@@ -32,7 +33,7 @@ public class GameplayScene : Scene
                 // intended angle of acceleration
                 if (playerMovement.X == 0 && playerMovement.Y == 0)
                 {
-                    float speed = movable.Velocity.Length();
+                    var speed = movable.Velocity.Length();
                     speed = Math.Max(0, speed - movable.MovementDeceleration * delta);
                     if (speed == 0) movable.Velocity = Vector2.Zero;
                     else movable.Velocity = Vector2.Normalize(movable.Velocity) * speed;
@@ -56,6 +57,12 @@ public class GameplayScene : Scene
                 // now we apply velocity as movement over time as per usual
                 puppet.Position += movable.Velocity * delta;
             }
+        }
+
+        foreach (var entity in LevelManager.ActiveLevel.Entities)
+        {
+            if(entity is IUpdating m)
+                m.Update(delta);
         }
     }
 
@@ -103,11 +110,7 @@ public class GameplayScene : Scene
         else if (e.ControlButton is ControlButton.Menu) // yeah this control flow is a bit wack deal with it
         {
             var newPlayer = SheepleManager.AddPlayer(e.DeviceId);
-            newPlayer.Puppet = new Actor();
-
-            newPlayer.Puppet.Position = new(100, 100);
-
-            CurrentLevel.Entities.Add(newPlayer.Puppet);
+            newPlayer.Puppet = LevelManager.SpawnEntity<Actor>(new(100, 100));
         }
     }
 
@@ -118,15 +121,7 @@ public class GameplayScene : Scene
             var player = SheepleManager.GetPlayer(e.DeviceId);
             SetButtonAndMap(player, e.ControlButton, false);
         }
-        else if (e.ControlButton is ControlButton.Menu) // yeah this control flow is a bit wack deal with it
-        {
-            var newPlayer = SheepleManager.AddPlayer(e.DeviceId);
-            newPlayer.Puppet = new Actor();
-
-            newPlayer.Puppet.Position = new(100, 100);
-
-            CurrentLevel.Entities.Add(newPlayer.Puppet);
-        }
+        // We don't need to create new players OnRelease too
     }
 
     public override void AxisControlMoved(AxisControlEventArgs e)
