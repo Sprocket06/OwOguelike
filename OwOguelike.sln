@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwOguelike.UI", "OwOguelike
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwOguelike.UI.Tests", "OwOguelike.UI.Tests\OwOguelike.UI.Tests.csproj", "{9101AD6C-3594-459E-AD15-874B251E768B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Momentum", "Momentum\Momentum\Momentum.csproj", "{FBA494FB-80CB-4AB3-9FED-D5CB09D0A413}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{9101AD6C-3594-459E-AD15-874B251E768B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9101AD6C-3594-459E-AD15-874B251E768B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9101AD6C-3594-459E-AD15-874B251E768B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBA494FB-80CB-4AB3-9FED-D5CB09D0A413}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBA494FB-80CB-4AB3-9FED-D5CB09D0A413}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBA494FB-80CB-4AB3-9FED-D5CB09D0A413}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBA494FB-80CB-4AB3-9FED-D5CB09D0A413}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

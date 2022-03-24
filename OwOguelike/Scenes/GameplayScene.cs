@@ -4,7 +4,8 @@ public class GameplayScene : Scene
 {
     public Level CurrentLevel;
     public Camera GameCam;
-
+    public Dummy TestDummy;
+    
     public override void LoadStep()
     {
     }
@@ -18,6 +19,9 @@ public class GameplayScene : Scene
         {
             UseCenteredOrigin = true
         };
+        TestDummy = new(new(250, 250));
+        CurrentLevel.Entities.Add(TestDummy);
+        GameCore.CollisionManager.Register(TestDummy);
     }
 
     public override void Update(float delta)
@@ -55,6 +59,11 @@ public class GameplayScene : Scene
 
                 // now we apply velocity as movement over time as per usual
                 puppet.Position += movable.Velocity * delta;
+                if (puppet is ICollisionEntity entity)
+                {
+                    entity.Collider.Position = puppet.Position;
+                    GameCore.CollisionManager.ProcessMovement(entity);
+                }
             }
         }
     }
@@ -103,11 +112,13 @@ public class GameplayScene : Scene
         else if (e.ControlButton is ControlButton.Menu) // yeah this control flow is a bit wack deal with it
         {
             var newPlayer = SheepleManager.AddPlayer(e.DeviceId);
-            newPlayer.Puppet = new Actor();
-
-            newPlayer.Puppet.Position = new(100, 100);
+            newPlayer.Puppet = new Actor(new(100, 100));
 
             CurrentLevel.Entities.Add(newPlayer.Puppet);
+            if (newPlayer.Puppet is ICollisionEntity entity)
+            {
+                GameCore.CollisionManager.Register(entity);
+            }
         }
     }
 
@@ -121,11 +132,13 @@ public class GameplayScene : Scene
         else if (e.ControlButton is ControlButton.Menu) // yeah this control flow is a bit wack deal with it
         {
             var newPlayer = SheepleManager.AddPlayer(e.DeviceId);
-            newPlayer.Puppet = new Actor();
-
-            newPlayer.Puppet.Position = new(100, 100);
+            newPlayer.Puppet = new Actor(new(100, 100));
 
             CurrentLevel.Entities.Add(newPlayer.Puppet);
+            if (newPlayer.Puppet is ICollisionEntity entity)
+            {
+                GameCore.CollisionManager.Register(entity);
+            }
         }
     }
 
@@ -147,7 +160,7 @@ public class GameplayScene : Scene
         if (b is ControlButton.MoveDown or ControlButton.MoveLeft or ControlButton.MoveRight or ControlButton.MoveUp)
         {
             axes[ControlAxis.LeftAxisX] = (short)((btns[ControlButton.MoveLeft] ? -short.MaxValue : 0) +
-                                                   (btns[ControlButton.MoveRight] ? short.MaxValue : 0));
+                                                  (btns[ControlButton.MoveRight] ? short.MaxValue : 0));
             axes[ControlAxis.LeftAxisY] = (short)((btns[ControlButton.MoveUp] ? -short.MaxValue : 0) +
                                                   (btns[ControlButton.MoveDown] ? short.MaxValue : 0));
         }
