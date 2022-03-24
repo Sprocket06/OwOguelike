@@ -11,7 +11,8 @@ global using OwOguelike.Config;
 global using OwOguelike.Levels;
 global using OwOguelike.Graphics;
 global using static OwOguelike.GameCore;
-global using static OwOguelike.Collision.cute_c2;
+
+global using Momentum;
 
 global using Chroma;
 global using Chroma.Commander;

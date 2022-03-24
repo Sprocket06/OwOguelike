@@ -14,6 +14,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Bulge\Bulge.csproj" />
         <ProjectReference Include="..\Chroma.Commander\Chroma.Commander\Chroma.Commander.csproj" />
+        <ProjectReference Include="..\Momentum\Momentum\Momentum.csproj" />
     </ItemGroup>
 
     <ItemGroup>

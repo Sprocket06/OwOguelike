@@ -6,3 +6,7 @@
 	path = Chroma.Commander
 	url = https://github.com/Enovale/Chroma.Commander.git
 	branch = master
+[submodule "Momentum"]
+	path = Momentum
+	url = https://github.com/Sprocket06/Momentum
+    branch = master

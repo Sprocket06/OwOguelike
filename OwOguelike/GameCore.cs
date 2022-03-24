@@ -5,6 +5,7 @@ public class GameCore : Game
     public static IContentProvider? ContentProvider;
     public static GraphicsManager GraphicsManager = null!;
     public new static Window Window = null!;
+    public static CollisionManager CollisionManager = new();
     public static readonly Log Log = LogManager.GetForCurrentAssembly();
     
     public static ScanCode ConsoleKey { get; } = ScanCode.Grave;
